@@ -22,11 +22,7 @@ function dcscrolltop_init(){
 
 function dcscrolltop_script(){
 	?>
-	<script type="text/javascript">
-	(function($){
-		$.scrollUp();
-	})(jQuery);
-	</script>
+	<script type="text/javascript">(function($){$.scrollUp();})(jQuery);</script>
 	<?php
 }
 
@@ -143,19 +139,14 @@ add_action('admin_head','DcScrollTop_admin_addCSS');
  * Adds DcScrollTop <script> and css to your header
  */
 function dcscrolltop_header(){
-
 ?>
 <!-- Add DcScrollTop CSS -->
 <style type="text/css">
 <?php
 	$st_customwidth = get_option( 'st_menu_customwidth' );
 	if ( !$st_customwidth ) { $st_customwidth = "650"; } 
-
 ?>
-@media screen and (max-width: <?php echo $st_customwidth; ?>px) {
-		/* Here we hide scroll top button */
-		#scrollUp { display: none!important; }
-	}
+@media screen and (max-width: <?php echo $st_customwidth; ?>px) {#scrollUp { display: none!important;}}
 </style>
 <!-- End DcScrollTop CSS -->
 <?php
