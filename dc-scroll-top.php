@@ -3,7 +3,7 @@
  * Plugin Name: DC Scroll Top
  * Plugin URI: https://github.com/bastiendc/dc-scroll-top
  * Description: Rajoute un bouton scroll to top.
- * Version: 0.1
+ * Version: 0.11
  * Author: Dynamic Creative
  * Author URI: http://www.dynamic-creative.com
  * GitHub Plugin URI: https://github.com/bastiendc/dc-scroll-top
