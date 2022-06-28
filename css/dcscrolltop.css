@@ -1,2 +1,2 @@
 /* MOVETOTOP */
-#scrollUp { bottom: 10px; right: 10px; height: 40px; width: 40px; background: url(../img/top.png) no-repeat; text-indent:-9999px; overflow:hidden; }
+#scrollUp { opacity: 1; transition: all 350ms ease;text-indent:-9999px; overflow:hidden; } #scrollUp:hover {opacity: .8;}
