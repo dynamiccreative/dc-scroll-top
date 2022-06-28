@@ -2,3 +2,5 @@
 .st_label{display:inline-block;width:180px;}
 .st_margins {background:#E8E5E5;padding:20px;}
 .dc_admin_left .mt-2 {margin-top: 20px;}
+.dc_admin_left label svg {display: inline-block; vertical-align: middle;}
+.dc_admin_left .st_radio_svg label {margin-right: 10px;}

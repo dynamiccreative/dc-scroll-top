@@ -154,19 +154,43 @@ function dcscrolltop_options() {
 			<span class="st_input"><input type="text" name="<?php echo $st_opt_size; ?>" value="<?php echo $st_opt_val_size; ?>" size="4"> px</span>
 		</p>
 
-		<p>
+		
+
+		<p class="st_radio_svg">
 			<span class="st_label"><?php _e("Style:", 'dcscrolltop' ); ?></span>
 			<?php $st_opt_val_style = get_option( 'st_opt_style' ); if ( !$st_opt_val_style ) { $st_opt_val_style = 1; }  ?>
-			<span class="st_input">
-				<select name="<?php echo $st_opt_style; ?>" id="pet-select">
-				    <option value="1" <?php if ($st_opt_val_style == 1) echo 'selected'; ?>>Style 1</option>
-				    <option value="2" <?php if ($st_opt_val_style == 2) echo 'selected'; ?>>Style 2</option>
-				    <option value="3" <?php if ($st_opt_val_style == 3) echo 'selected'; ?>>Style 3</option>
-				    <option value="4" <?php if ($st_opt_val_style == 4) echo 'selected'; ?>>Style 4</option>
-				    <option value="5" <?php if ($st_opt_val_style == 5) echo 'selected'; ?>>Style 5</option>
-				    <option value="6" <?php if ($st_opt_val_style == 6) echo 'selected'; ?>>Style 6</option>
-				</select>
-			</span>
+			<span>
+				<label for="s1">
+					<input type="radio" id="s1" name="<?php echo $st_opt_style; ?>" value="1"
+	             	<?php if ($st_opt_val_style == 1) echo 'checked'; ?>>
+	         		<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20"><path d="<?php echo getStyle(1); ?>"/></svg>
+	      		</label>
+	      		<label for="s2">
+					<input type="radio" id="s2" name="<?php echo $st_opt_style; ?>" value="2"
+	             	<?php if ($st_opt_val_style == 2) echo 'checked'; ?>>
+	      			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20"><path d="<?php echo getStyle(2); ?>"/></svg>
+	      		</label>
+	      		<label for="s3">
+					<input type="radio" id="s3" name="<?php echo $st_opt_style; ?>" value="3"
+	             	<?php if ($st_opt_val_style == 3) echo 'checked'; ?>>
+	      			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20"><path d="<?php echo getStyle(3); ?>"/></svg>
+	      		</label>
+	      		<label for="s4">
+					<input type="radio" id="s4" name="<?php echo $st_opt_style; ?>" value="4"
+	             	<?php if ($st_opt_val_style == 4) echo 'checked'; ?>>
+	      			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20"><path d="<?php echo getStyle(4); ?>"/></svg>
+	      		</label>
+	      		<label for="s5">
+					<input type="radio" id="s5" name="<?php echo $st_opt_style; ?>" value="5"
+	             	<?php if ($st_opt_val_style == 5) echo 'checked'; ?>>
+	      			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20"><path d="<?php echo getStyle(5); ?>"/></svg>
+	      		</label>
+	      		<label for="s6">
+					<input type="radio" id="s6" name="<?php echo $st_opt_style; ?>" value="6"
+	             	<?php if ($st_opt_val_style == 6) echo 'checked'; ?>>
+	      			<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20"><path d="<?php echo getStyle(6); ?>"/></svg>
+	      		</label>
+	      	</span>
 		</p>
 	</div>
 	<?php submit_button(); ?>
