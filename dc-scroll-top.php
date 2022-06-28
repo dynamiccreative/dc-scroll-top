@@ -3,7 +3,7 @@
  * Plugin Name: DC Scroll Top
  * Plugin URI: https://github.com/bastiendc/dc-scroll-top
  * Description: Rajoute un bouton scroll to top.
- * Version: 0.2
+ * Version: 0.21
  * Author: Dynamic Creative
  * Author URI: http://www.dynamic-creative.com
  * GitHub Plugin URI: https://github.com/bastiendc/dc-scroll-top
@@ -92,7 +92,7 @@ function dcscrolltop_options() {
     echo "<p>" . __( 'Ce plugin rajoute un bouton Scroll to Top en bas de votre site.', 'dcscrolltop' ) . "</p>";
 
     // left part
-    echo '<div class="admin_left">';
+    echo '<div class="dc_admin_left">';
 
     // settings form
     echo '<form method="post" action="">';
@@ -108,45 +108,41 @@ function dcscrolltop_options() {
 	?>
 	<input type="hidden" name="<?php echo $hidden_field_name; ?>" value="Y">
 	<div class="st_margins">
+		<h2>Responsive</h2>
 		<p>
-			Responsive: disparition du bouton en dessous de 650px de largeur par défaut.
-		</p>
-		<p>
-			<span class="st_label"><?php _e("Enter a screen size in pixels:", 'dcscrolltop' ); ?></span>
+			<span class="st_label"><?php _e("Breakpoint Mobile :", 'dcscrolltop' ); ?></span>
 			<?php $st_opt_val_width = get_option( 'st_opt_name1' ); if ( !$st_opt_val_width ) { $st_opt_val_width = "650"; }  ?>
 			<span class="st_input"><input type="text" name="<?php echo $st_opt_name1; ?>" value="<?php echo $st_opt_val_width; ?>" size="5"> px</span>
 		</p>
 	</div>
 
-	<div class="">
+
+	<div class="st_margins mt-2">
+		<h2>Style</h2>
 		<p>
 			<span class="st_label"><?php _e("Enter color hexa:", 'dcscrolltop' ); ?></span>
 			<?php $st_opt_val_color = get_option( 'st_opt_color' ); if ( !$st_opt_val_color ) { $st_opt_val_color = "000"; }  ?>
 			<span class="st_input"># <input type="text" name="<?php echo $st_opt_color; ?>" value="<?php echo $st_opt_val_color; ?>" size="7"></span>
 		</p>
-	</div>
-	<div class="">
+
 		<p>
 			<span class="st_label"><?php _e("Bottom position:", 'dcscrolltop' ); ?></span>
 			<?php $st_opt_val_pos_bottom = get_option( 'st_opt_pos_bottom' ); if ( !$st_opt_val_pos_bottom ) { $st_opt_val_pos_bottom = "10"; }  ?>
 			<span class="st_input"><input type="text" name="<?php echo $st_opt_pos_bottom; ?>" value="<?php echo $st_opt_val_pos_bottom; ?>" size="4"> px</span>
 		</p>
-	</div>
-	<div class="">
+
 		<p>
 			<span class="st_label"><?php _e("Right position:", 'dcscrolltop' ); ?></span>
 			<?php $st_opt_val_pos_right = get_option( 'st_opt_pos_right' ); if ( !$st_opt_val_pos_right ) { $st_opt_val_pos_right = "10"; }  ?>
 			<span class="st_input"><input type="text" name="<?php echo $st_opt_pos_right; ?>" value="<?php echo $st_opt_val_pos_right; ?>" size="4"> px</span>
 		</p>
-	</div>
-	<div class="">
+
 		<p>
 			<span class="st_label"><?php _e("Width:", 'dcscrolltop' ); ?></span>
 			<?php $st_opt_val_size = get_option( 'st_opt_size' ); if ( !$st_opt_val_size ) { $st_opt_val_size = "40"; }  ?>
-			<span class="st_input"><input type="text" name="<?php echo $st_opt_size; ?>" value="<?php echo $st_opt_val_size; ?>" size="3"> px</span>
+			<span class="st_input"><input type="text" name="<?php echo $st_opt_size; ?>" value="<?php echo $st_opt_val_size; ?>" size="4"> px</span>
 		</p>
-	</div>
-	<div class="">
+
 		<p>
 			<span class="st_label"><?php _e("Style:", 'dcscrolltop' ); ?></span>
 			<?php $st_opt_val_style = get_option( 'st_opt_style' ); if ( !$st_opt_val_style ) { $st_opt_val_style = 1; }  ?>
@@ -156,6 +152,8 @@ function dcscrolltop_options() {
 				    <option value="2" <?php if ($st_opt_val_style == 2) echo 'selected'; ?>>Style 2</option>
 				    <option value="3" <?php if ($st_opt_val_style == 3) echo 'selected'; ?>>Style 3</option>
 				    <option value="4" <?php if ($st_opt_val_style == 4) echo 'selected'; ?>>Style 4</option>
+				    <option value="5" <?php if ($st_opt_val_style == 5) echo 'selected'; ?>>Style 5</option>
+				    <option value="6" <?php if ($st_opt_val_style == 6) echo 'selected'; ?>>Style 6</option>
 				</select>
 			</span>
 		</p>
@@ -169,7 +167,7 @@ function dcscrolltop_options() {
 	<div class="admin_right">
 			<h3>A propos de Dynamic Creative</h3>
 			<?php echo "<p>Agence Web cr&eacute;e en 1999. Conception de sites Internet, Mobile, d&eacute;veloppement et bien d'autres...</p>"; ?>
-			<p><a href="http://www.dynamic-creative.com" target="_blank">dynamic-creative.com</a></p>
+			<p><a href="https://www.dynamic-creative.com" target="_blank"><img src="<?php echo plugins_url( 'img/logo.png' , __FILE__ ); ?>" alt="dynamic-creative.com" width="200" height="44"/></a></p>
 			
 			<hr />
 
@@ -188,12 +186,18 @@ function getStyle($n){
 		case 2 :
 			$icon = 'M256,0C114.6,0,0,114.6,0,256s114.6,256,256,256s256-114.6,256-256S397.4,0,256,0z M360.4,214.1c-7.1,7.2-18.7,7.2-25.9,0.1	c0,0-0.1-0.1-0.1-0.1l-60.2-60.3v248.5c0,10.1-8.2,18.3-18.3,18.3c-10.1,0-18.3-8.2-18.3-18.3V153.8l-60.2,60.3	c-7.1,7.2-18.7,7.2-25.9,0.1c0,0-0.1-0.1-0.1-0.1c-7.2-7.1-7.2-18.7-0.1-25.9c0,0,0.1-0.1,0.1-0.1L243,96.7	c7.1-7.2,18.7-7.2,25.9-0.1c0,0,0.1,0.1,0.1,0.1l91.4,91.4c7.2,7.1,7.2,18.7,0.1,25.9C360.5,214.1,360.4,214.1,360.4,214.1z';
 			break;
-		case 3 :
+		case 6 :
+			$icon = 'M256,0C114.6,0,0,114.6,0,256s114.6,256,256,256s256-114.6,256-256S397.4,0,256,0z M256,475.4 c-121.2,0-219.4-98.2-219.4-219.4S134.8,36.6,256,36.6S475.4,134.8,475.4,256S377.2,475.4,256,475.4z M256,184.5l117.2,117.2 l-25.8,25.8L256,236.1l-91.4,91.4l-25.8-25.8L256,184.5z';
+			break;	
+		case 4 :
 			$icon = 'M256,512C114.6,512,0,397.4,0,256S114.6,0,256,0s256,114.6,256,256S397.4,512,256,512z M256,32C132.3,32,32,132.3,32,256 s100.3,224,224,224s224-100.3,224-224S379.7,32,256,32z M384,336c-4.2,0.1-8.3-1.7-11.2-4.8L256,214.7L139.2,331.2	c-6.2,6.2-16.2,6.2-22.4,0c-6.2-6.2-6.2-16.2,0-22.4l128-128c5.8-6.2,15.5-6.5,21.7-0.7c0.2,0.2,0.5,0.5,0.7,0.7l128,128	c6.2,5.8,6.5,15.5,0.7,21.7c-0.2,0.2-0.5,0.5-0.7,0.7C392.3,334.3,388.2,336.1,384,336L384,336z';
 			break;
-		case 4 :
+		case 5 :
 			$icon = 'M256,0C114.8,0,0,114.8,0,256s114.8,256,256,256s256-114.8,256-256S397.2,0,256,0z M256,480	C132.5,480,32,379.5,32,256S132.5,32,256,32s224,100.5,224,224S379.5,480,256,480z M347.3,228.7c6.3,6.3,6.3,16.4,0,22.6	c-3.1,3.1-7.2,4.7-11.3,4.7s-8.2-1.6-11.3-4.7L272,198.6V352c0,8.8-7.2,16-16,16s-16-7.2-16-16V198.6l-52.7,52.7	c-6.3,6.3-16.4,6.3-22.6,0s-6.3-16.4,0-22.6l80-80c6.3-6.3,16.4-6.3,22.6,0L347.3,228.7z';
 			break;
+		case 3 :
+			$icon = 'M256,0C114.6,0,0,114.6,0,256s114.6,256,256,256s256-114.6,256-256S397.4,0,256,0z M348.2,319.1l-91.4-91.4 l-91.4,91.4l-25.8-25.8l117.2-117.2L374,293.3L348.2,319.1z';
+			break;		
 		default:
 			$icon = 'M256,0C114.6,0,0,114.6,0,256s114.6,256,256,256s256-114.6,256-256S397.4,0,256,0z M369.2,311.1c-7.7,7.7-20.2,7.7-28,0l-85.1-85.1l-85.1,85.1c-8.3,7.1-20.8,6.1-28-2.2c-6.4-7.4-6.4-18.4,0-25.8l99.1-99.1c7.7-7.7,20.2-7.7,28,0	l99.1,99.1C377.1,291,377,303.5,369.2,311.1z';
 	}
