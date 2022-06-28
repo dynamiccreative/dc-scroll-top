@@ -3,7 +3,7 @@
  * Plugin Name: DC Scroll Top
  * Plugin URI: https://github.com/bastiendc/dc-scroll-top
  * Description: Rajoute un bouton scroll to top.
- * Version: 0.21
+ * Version: 0.22
  * Author: Dynamic Creative
  * Author URI: http://www.dynamic-creative.com
  * GitHub Plugin URI: https://github.com/bastiendc/dc-scroll-top
@@ -24,6 +24,17 @@ function dcscrolltop_script(){
 	?>
 	<script type="text/javascript">(function($){$.scrollUp();})(jQuery);</script>
 	<?php
+}
+
+/**/
+add_action( 'admin_enqueue_scripts', 'wptuts_add_color_picker' );
+function wptuts_add_color_picker( $hook ) {
+    if( is_admin() ) {
+        // Add the color picker css file       
+        wp_enqueue_style( 'wp-color-picker' ); 
+        // Include our custom jQuery file with WordPress Color Picker dependency
+        wp_enqueue_script( 'custom-script-handle', plugins_url( 'js/custom-script.js', __FILE__ ), array( 'wp-color-picker' ), false, true ); 
+    }
 }
 
 /**
@@ -120,9 +131,9 @@ function dcscrolltop_options() {
 	<div class="st_margins mt-2">
 		<h2>Style</h2>
 		<p>
-			<span class="st_label"><?php _e("Enter color hexa:", 'dcscrolltop' ); ?></span>
-			<?php $st_opt_val_color = get_option( 'st_opt_color' ); if ( !$st_opt_val_color ) { $st_opt_val_color = "000"; }  ?>
-			<span class="st_input"># <input type="text" name="<?php echo $st_opt_color; ?>" value="<?php echo $st_opt_val_color; ?>" size="7"></span>
+			<span class="st_label"><?php _e("Color:", 'dcscrolltop' ); ?></span>
+			<?php $st_opt_val_color = get_option( 'st_opt_color' ); if ( !$st_opt_val_color ) { $st_opt_val_color = "#000"; }  ?>
+			<input type="text" name="<?php echo $st_opt_color; ?>" value="<?php echo $st_opt_val_color; ?>" class="color-field" data-default-color="<?php echo $st_opt_val_color; ?>" />
 		</p>
 
 		<p>
@@ -178,6 +189,7 @@ function dcscrolltop_options() {
     echo "</div>";
 }
 
+/*different svg style*/
 function getStyle($n){
 	switch ( $n ) {
 		case 1 :
@@ -202,6 +214,12 @@ function getStyle($n){
 			$icon = 'M256,0C114.6,0,0,114.6,0,256s114.6,256,256,256s256-114.6,256-256S397.4,0,256,0z M369.2,311.1c-7.7,7.7-20.2,7.7-28,0l-85.1-85.1l-85.1,85.1c-8.3,7.1-20.8,6.1-28-2.2c-6.4-7.4-6.4-18.4,0-25.8l99.1-99.1c7.7-7.7,20.2-7.7,28,0	l99.1,99.1C377.1,291,377,303.5,369.2,311.1z';
 	}
 	return $icon;
+}
+
+/*Transform hexa color for svg*/
+function returnColor($c){
+	$r = str_replace("#", "%23", $c);
+    return $r;
 }
 
 /**
@@ -241,13 +259,13 @@ function dcscrolltop_header(){
 	$st_size = get_option( 'st_opt_size' );
 	$st_style = get_option( 'st_opt_style' );
 	if ( !$st_customwidth ) { $st_customwidth = "650"; } 
-	if ( !$st_color ) { $st_color = "000"; }
+	if ( !$st_color ) { $st_color = "#000"; }
 	if ( !$st_pos_bottom ) { $st_pos_bottom = "10"; }
 	if ( !$st_pos_right ) { $st_pos_right = "10"; }
 	if ( !$st_size ) { $st_size = "40"; }
 	if ( !$st_style ) { $st_style = 1; }
 ?>
-#scrollUp {bottom: <?php echo $st_pos_bottom; ?>px; right: <?php echo $st_pos_right; ?>px; height: <?php echo $st_size; ?>px; width: <?php echo $st_size; ?>px; background: url('data: image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23<?php echo $st_color; ?>" d="<?php echo getStyle($st_style); ?>"/></svg>') no-repeat; background-size: contain;}
+#scrollUp {bottom: <?php echo $st_pos_bottom; ?>px; right: <?php echo $st_pos_right; ?>px; height: <?php echo $st_size; ?>px; width: <?php echo $st_size; ?>px; background: url('data: image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="<?php echo returnColor($st_color); ?>" d="<?php echo getStyle($st_style); ?>"/></svg>') no-repeat; background-size: contain;}
 @media screen and (max-width: <?php echo $st_customwidth; ?>px) {#scrollUp { display: none!important;}}
 </style>
 <!-- End DcScrollTop CSS -->
