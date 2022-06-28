@@ -252,7 +252,7 @@ function returnColor($c){
  */
 
 function dcscrolltop_settings_link($links) { 
-	  $settings_link = '<a href="options-general.php?page=dcscrolltop-options">Settings</a>'; 
+	  $settings_link = sprintf('<a href="options-general.php?page=dcscrolltop-options">%s</a>', __("Settings", "dcscrolltop")); 
 	  array_unshift($links, $settings_link); 
 	  return $links; 
 }
