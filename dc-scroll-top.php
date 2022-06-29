@@ -3,7 +3,7 @@
  * Plugin Name: DC Scroll Top
  * Plugin URI: https://github.com/bastiendc/dc-scroll-top
  * Description: Rajoute un bouton scroll to top.
- * Version: 0.22
+ * Version: 0.23
  * Author: Dynamic Creative
  * Author URI: http://www.dynamic-creative.com
  * GitHub Plugin URI: https://github.com/bastiendc/dc-scroll-top
@@ -91,12 +91,11 @@ function dcscrolltop_options() {
 
      	// Put an settings updated message on the screen
 	?>
-	<div class="updated"><p><strong><?php _e('Your settings have been saved.', 'dcscrolltop-updated' ); ?></strong></p></div>
+	<div class="updated"><p><strong><?php _e('Your settings have been saved.', 'dcscrolltop' ); ?></strong></p></div>
 	<?php
 	}
 	// Now display the settings editing screen
     echo '<div class="wrap">';
-    echo '<div id="icon-options-general" class="icon32"><br /></div>';
 
     // header
     echo "<h2>" . __( 'DC Scroll Top Settings', 'dcscrolltop' ) . "</h2>";
@@ -199,7 +198,7 @@ function dcscrolltop_options() {
 	echo "</form>";
 	echo "</div><!-- end .admin_left -->";
 	?>
-	<div class="admin_right">
+	<div class="dc_admin_right">
 			<h3>A propos de Dynamic Creative</h3>
 			<?php echo "<p>Agence Web cr&eacute;e en 1999. Conception de sites Internet, Mobile, d&eacute;veloppement et bien d'autres...</p>"; ?>
 			<p><a href="https://www.dynamic-creative.com" target="_blank"><img src="<?php echo plugins_url( 'img/logo.png' , __FILE__ ); ?>" alt="dynamic-creative.com" width="200" height="44"/></a></p>
@@ -210,7 +209,6 @@ function dcscrolltop_options() {
 	</div><!-- end .wrap -->
 	<?php
 
-    echo "</div>";
 }
 
 /*different svg style*/
