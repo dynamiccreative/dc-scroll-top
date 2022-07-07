@@ -1,6 +1,8 @@
 # DC SCROLL TOP
 Wordpress Move to Top plugin.
 
+![downloads](https://img.shields.io/github/downloads/bastiendc/dc-scroll-top/total) ![downloads@latest](https://img.shields.io/github/downloads/bastiendc/dc-scroll-top/latest/total)
+
 ## Settings
 * Responsive
 * Color
