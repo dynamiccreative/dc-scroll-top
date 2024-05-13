@@ -3,7 +3,7 @@
  * Plugin Name: DC Scroll Top
  * Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
  * Description: Rajoute un bouton scroll to top.
- * Version: 0.231
+ * Version: 0.232
  * Author: Dynamic Creative
  * Author URI: http://www.dynamic-creative.com
  * GitHub Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
@@ -55,7 +55,7 @@ function dcscrolltop_options() {
 
 	// variables for the field and option names
 	$hidden_field_name 		= 'st_submit_hidden';
-	$st_opt_name1 			= 'st_menu_customwidth';
+	$st_opt_responsive_width= 'st_opt_responsive_width';
 	$st_opt_color			= 'st_opt_color';
 	$st_opt_pos_bottom		= 'st_opt_pos_bottom';
 	$st_opt_pos_right		= 'st_opt_pos_right';
@@ -63,7 +63,7 @@ function dcscrolltop_options() {
 	$st_opt_style			= 'st_opt_style';
 
 	// Read in existing option value from database
-  	$st_opt_val_width 		= get_option( $st_opt_name1 );
+  	$st_opt_val_responsive_width = get_option( $st_opt_responsive_width );
   	$st_opt_val_color 		= get_option( $st_opt_color );
   	$st_opt_val_pos_bottom 	= get_option( $st_opt_pos_bottom );
   	$st_opt_val_pos_right	= get_option( $st_opt_pos_right );
@@ -74,7 +74,7 @@ function dcscrolltop_options() {
   	// If they did, this hidden field will be set to 'Y'
   	if( isset($_POST[ $hidden_field_name ]) && $_POST[ $hidden_field_name ] == 'Y' ) {
   		// Read their posted value
-      	$st_opt_val_width 		= $_POST[ $st_opt_name1 ];
+      	$st_opt_val_responsive_width 		= $_POST[ $st_opt_responsive_width ];
       	$st_opt_val_color 		= $_POST[ $st_opt_color ];
       	$st_opt_val_pos_bottom 	= $_POST[ $st_opt_pos_bottom ];
       	$st_opt_val_pos_right 	= $_POST[ $st_opt_pos_right ];
@@ -82,7 +82,7 @@ function dcscrolltop_options() {
       	$st_opt_val_style 		= $_POST[ $st_opt_style ];
 
       	// Save the posted value in the database
-     	update_option( $st_opt_name1, $st_opt_val_width );
+     	update_option( $st_opt_responsive_width, $st_opt_val_responsive_width );
      	update_option( $st_opt_color, $st_opt_val_color );
      	update_option( $st_opt_pos_bottom, $st_opt_val_pos_bottom );
      	update_option( $st_opt_pos_right, $st_opt_val_pos_right );
@@ -109,7 +109,7 @@ function dcscrolltop_options() {
 
     // register settings
 	settings_fields( 'dcscrolltop_settings' );
-	register_setting( 'dcscrolltop_settings', 'st_menu_customwidth' ); 
+	register_setting( 'dcscrolltop_settings', 'st_opt_responsive_width' ); 
 	register_setting( 'dcscrolltop_settings', 'st_opt_color' );
 	register_setting( 'dcscrolltop_settings', 'st_opt_pos_bottom' );
 	register_setting( 'dcscrolltop_settings', 'st_opt_pos_right' );
@@ -121,8 +121,8 @@ function dcscrolltop_options() {
 		<h2>Responsive</h2>
 		<p>
 			<span class="st_label"><?php _e("Breakpoint Mobile :", 'dcscrolltop' ); ?></span>
-			<?php $st_opt_val_width = get_option( 'st_opt_name1' ); if ( !$st_opt_val_width ) { $st_opt_val_width = "650"; }  ?>
-			<span class="st_input"><input type="text" name="<?php echo $st_opt_name1; ?>" value="<?php echo $st_opt_val_width; ?>" size="5"> px</span>
+			<?php $st_opt_val_width = get_option( 'st_opt_responsive_width' ); if ( !$st_opt_val_responsive_width ) { $st_opt_val_responsive_width = "650"; }  ?>
+			<span class="st_input"><input type="text" name="<?php echo $st_opt_responsive_width; ?>" value="<?php echo $st_opt_val_responsive_width; ?>" size="5"> px</span>
 		</p>
 	</div>
 
@@ -274,13 +274,13 @@ function dcscrolltop_header(){
 <!-- Add DcScrollTop CSS -->
 <style type="text/css">
 <?php
-	$st_customwidth = get_option( 'st_menu_customwidth' );
+	$st_responsive_width = get_option( 'st_opt_responsive_width' );
 	$st_color = get_option( 'st_opt_color' );
 	$st_pos_bottom = get_option( 'st_opt_pos_bottom' );
 	$st_pos_right = get_option( 'st_opt_pos_right' );
 	$st_size = get_option( 'st_opt_size' );
 	$st_style = get_option( 'st_opt_style' );
-	if ( !$st_customwidth ) { $st_customwidth = "650"; } 
+	if ( !$st_responsive_width ) { $st_responsive_width = "650"; } 
 	if ( !$st_color ) { $st_color = "#000"; }
 	if ( !$st_pos_bottom ) { $st_pos_bottom = "10"; }
 	if ( !$st_pos_right ) { $st_pos_right = "10"; }
@@ -288,10 +288,9 @@ function dcscrolltop_header(){
 	if ( !$st_style ) { $st_style = 1; }
 ?>
 #scrollUp {bottom: <?php echo $st_pos_bottom; ?>px; right: <?php echo $st_pos_right; ?>px; height: <?php echo $st_size; ?>px; width: <?php echo $st_size; ?>px; background: url('data: image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="<?php echo returnColor($st_color); ?>" d="<?php echo getStyle($st_style); ?>"/></svg>') no-repeat; background-size: contain;}
-@media screen and (max-width: <?php echo $st_customwidth; ?>px) {#scrollUp { display: none!important;}}
+@media screen and (max-width: <?php echo $st_responsive_width; ?>px) {#scrollUp { display: none!important;}}
 </style>
 <!-- End DcScrollTop CSS -->
 <?php
 }
 add_action('wp_head','dcscrolltop_header', '11' );
-
