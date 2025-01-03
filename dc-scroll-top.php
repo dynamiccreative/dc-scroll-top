@@ -3,7 +3,7 @@
  * Plugin Name: DC Scroll Top
  * Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
  * Description: Rajoute un bouton scroll to top.
- * Version: 0.232
+ * Version: 0.3
  * Author: Dynamic Creative
  * Author URI: http://www.dynamic-creative.com
  * GitHub Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
@@ -15,16 +15,11 @@ add_action('init', 'dcscrolltop_init');
 
 function dcscrolltop_init(){
 	wp_enqueue_style ( 'dcscrolltop', plugins_url() . '/dc-scroll-top/css/dcscrolltop.css');
-	wp_enqueue_script( 'dcscrolltop', plugins_url() . '/dc-scroll-top/js/jquery.scrollUp.min.js',array('jquery'),'2.1.1',true );
-	add_action('wp_footer', 'dcscrolltop_script',100);
+	wp_enqueue_script( 'dcscrolltop', plugins_url() . '/dc-scroll-top/js/jquery.scrollUp.js',array('jquery'),'2.1.1',true );
 }
 
 
-function dcscrolltop_script(){
-	?>
-	<script type="text/javascript">(function($){$.scrollUp();})(jQuery);</script>
-	<?php
-}
+
 
 /**/
 add_action( 'admin_enqueue_scripts', 'wptuts_add_color_picker' );
@@ -60,6 +55,7 @@ function dcscrolltop_options() {
 	$st_opt_pos_bottom		= 'st_opt_pos_bottom';
 	$st_opt_pos_right		= 'st_opt_pos_right';
 	$st_opt_size			= 'st_opt_size';
+	$st_opt_anim			= 'st_opt_anim';
 	$st_opt_style			= 'st_opt_style';
 
 	// Read in existing option value from database
@@ -68,6 +64,7 @@ function dcscrolltop_options() {
   	$st_opt_val_pos_bottom 	= get_option( $st_opt_pos_bottom );
   	$st_opt_val_pos_right	= get_option( $st_opt_pos_right );
   	$st_opt_val_size 		= get_option( $st_opt_size );
+  	$st_opt_val_anim 		= get_option( $st_opt_anim );
   	$st_opt_val_style 		= get_option( $st_opt_style );
 
 	// See if the user has posted us some information
@@ -79,6 +76,7 @@ function dcscrolltop_options() {
       	$st_opt_val_pos_bottom 	= $_POST[ $st_opt_pos_bottom ];
       	$st_opt_val_pos_right 	= $_POST[ $st_opt_pos_right ];
       	$st_opt_val_size 		= $_POST[ $st_opt_size ];
+      	$st_opt_val_anim 		= $_POST[ $st_opt_anim ];
       	$st_opt_val_style 		= $_POST[ $st_opt_style ];
 
       	// Save the posted value in the database
@@ -87,6 +85,7 @@ function dcscrolltop_options() {
      	update_option( $st_opt_pos_bottom, $st_opt_val_pos_bottom );
      	update_option( $st_opt_pos_right, $st_opt_val_pos_right );
      	update_option( $st_opt_size, $st_opt_val_size );
+     	update_option( $st_opt_anim, $st_opt_val_anim );
      	update_option( $st_opt_style, $st_opt_val_style );
 
      	// Put an settings updated message on the screen
@@ -114,6 +113,7 @@ function dcscrolltop_options() {
 	register_setting( 'dcscrolltop_settings', 'st_opt_pos_bottom' );
 	register_setting( 'dcscrolltop_settings', 'st_opt_pos_right' );
 	register_setting( 'dcscrolltop_settings', 'st_opt_size' );
+	register_setting( 'dcscrolltop_settings', 'st_opt_anim' ); 
 	register_setting( 'dcscrolltop_settings', 'st_opt_style' ); 
 	?>
 	<input type="hidden" name="<?php echo $hidden_field_name; ?>" value="Y">
@@ -151,6 +151,17 @@ function dcscrolltop_options() {
 			<span class="st_label"><?php _e("Width:", 'dcscrolltop' ); ?></span>
 			<?php $st_opt_val_size = get_option( 'st_opt_size' ); if ( !$st_opt_val_size ) { $st_opt_val_size = "40"; }  ?>
 			<span class="st_input"><input type="text" name="<?php echo $st_opt_size; ?>" value="<?php echo $st_opt_val_size; ?>" size="4"> px</span>
+		</p>
+
+		<p>
+			<span class="st_label"><?php _e("Animation:", 'dcscrolltop' ); ?></span>
+			<?php $st_opt_val_anim = get_option( 'st_opt_anim' ); if ( !$st_opt_val_anim ) { $st_opt_val_anim = "fade"; }  ?>
+			<span class="st_input">
+				<select name="<?php echo $st_opt_anim; ?>" id="su-anim">
+					<option value="fade" <?php if ($st_opt_val_anim == 'fade') echo 'selected'; ?>>Fade</option>
+					<option value="slide" <?php if ($st_opt_val_anim == 'slide') echo 'selected'; ?>>Slide</option>
+				</select>
+			</span>
 		</p>
 
 		
@@ -287,6 +298,8 @@ function dcscrolltop_header(){
 	if ( !$st_size ) { $st_size = "40"; }
 	if ( !$st_style ) { $st_style = 1; }
 ?>
+.scrollup-slide #scrollUp {bottom: -<?php echo ($st_pos_bottom + $st_size); ?>px;}
+.scrollup-slide.scrollup #scrollUp {bottom: <?php echo $st_pos_bottom; ?>px; opacity:1; visibility: visible;}
 #scrollUp {bottom: <?php echo $st_pos_bottom; ?>px; right: <?php echo $st_pos_right; ?>px; height: <?php echo $st_size; ?>px; width: <?php echo $st_size; ?>px; background: url('data: image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="<?php echo returnColor($st_color); ?>" d="<?php echo getStyle($st_style); ?>"/></svg>') no-repeat; background-size: contain;}
 @media screen and (max-width: <?php echo $st_responsive_width; ?>px) {#scrollUp { display: none!important;}}
 </style>
@@ -294,3 +307,12 @@ function dcscrolltop_header(){
 <?php
 }
 add_action('wp_head','dcscrolltop_header', '11' );
+
+function dcscrolltop_script(){
+	$st_anim = get_option( 'st_opt_anim' );
+	?>
+	<script type="text/javascript">(function($){$.scrollUp({animation: "<?php echo $st_anim; ?>"});})(jQuery);</script>
+	<?php
+}
+
+add_action('wp_footer', 'dcscrolltop_script',100);
