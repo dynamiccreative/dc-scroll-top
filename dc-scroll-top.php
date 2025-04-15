@@ -2,8 +2,9 @@
 /**
  * Plugin Name: DC Scroll Top
  * Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
+ * Update URI: https://github.com/dynamiccreative/dc-scroll-top
  * Description: Rajoute un bouton scroll to top.
- * Version: 0.3
+ * Version: 0.3.1
  * Author: Dynamic Creative
  * Author URI: http://www.dynamic-creative.com
  * GitHub Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
@@ -11,14 +12,31 @@
  */
 
 
+define( 'DST_VERSION', '0.3.1' );
+define( 'DST_FILE', __FILE__ );
+define( 'DST_DIR_PATH', plugin_dir_path( DST_FILE ) );
+define( 'DST_DIR_URL', plugin_dir_url( DST_FILE ) );
+
+class Scroll_Top {
+	public function initialize() {
+		$this->include_files();
+
+		//add_action( 'admin_enqueue_scripts', [$this, 'load_admin_styles'] );
+	}
+
+	public function include_files() {
+		require_once DST_DIR_PATH . 'inc/update.php';
+	}
+}
+$st = new Scroll_Top();
+$st->initialize();
+
 add_action('init', 'dcscrolltop_init');
 
 function dcscrolltop_init(){
-	wp_enqueue_style ( 'dcscrolltop', plugins_url() . '/dc-scroll-top/css/dcscrolltop.css');
-	wp_enqueue_script( 'dcscrolltop', plugins_url() . '/dc-scroll-top/js/jquery.scrollUp.js',array('jquery'),'2.1.1',true );
+	wp_enqueue_style ( 'dcscrolltop', plugin_dir_url( __FILE__ ) . '/assets/css/dcscrolltop.css');
+	wp_enqueue_script( 'dcscrolltop', plugin_dir_url( __FILE__ ) . '/assets/js/jquery.scrollUp.js',['jquery'],'2.1.1',true );
 }
-
-
 
 
 /**/
@@ -28,7 +46,7 @@ function wptuts_add_color_picker( $hook ) {
         // Add the color picker css file       
         wp_enqueue_style( 'wp-color-picker' ); 
         // Include our custom jQuery file with WordPress Color Picker dependency
-        wp_enqueue_script( 'custom-script-handle', plugins_url( 'js/custom-script.js', __FILE__ ), array( 'wp-color-picker' ), false, true ); 
+        wp_enqueue_script( 'custom-script-handle', plugins_url( 'assets/js/custom-script.js', __FILE__ ), array( 'wp-color-picker' ), false, true ); 
     }
 }
 
@@ -212,7 +230,7 @@ function dcscrolltop_options() {
 	<div class="dc_admin_right">
 			<h3>A propos de Dynamic Creative</h3>
 			<?php echo "<p>Agence Web cr&eacute;e en 1999. Conception de sites Internet, Mobile, d&eacute;veloppement et bien d'autres...</p>"; ?>
-			<p><a href="https://www.dynamic-creative.com" target="_blank"><img src="<?php echo plugins_url( 'img/logo.png' , __FILE__ ); ?>" alt="dynamic-creative.com" width="200" height="44"/></a></p>
+			<p><a href="https://www.dynamic-creative.com" target="_blank"><img src="<?php echo plugins_url( 'assets/img/logo.png' , __FILE__ ); ?>" alt="dynamic-creative.com" width="200" height="44"/></a></p>
 			
 			<hr />
 
