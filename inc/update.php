@@ -22,7 +22,9 @@ class MyPlugin_GitHub_Updater {
 	    'owner'         => 'dynamiccreative', 
 	    'github_url'    => 'https://github.com/dynamiccreative/dc-scroll-top',
 	    'zip_url'       => 'https://github.com/dynamiccreative/dc-scroll-top/archive/refs/tags/{tag}.zip',
-	    'access_token'  => '', // Optional: GitHub Personal Access Token for private repos
+	    'access_token'  => '',
+	    'icon_url'      => 'https://raw.githubusercontent.com/dynamiccreative/dc-scroll-top/main/assets/img/icon-256x256.png',
+        'banner_url'      => 'https://raw.githubusercontent.com/dynamiccreative/dc-scroll-top/main/assets/img/banner-1544x500.png',
 	];
 
 	/**
@@ -38,7 +40,7 @@ class MyPlugin_GitHub_Updater {
 	public function __construct() {
 	    add_filter( 'update_plugins_github.com', [ $this, 'self_update' ], 10, 4 );
 	    add_filter( 'plugins_api', [ $this, 'dst_plugin_info' ], 9999, 3 );
-	    //add_filter( 'all_plugins', [ $this,'prefix_add_plugin_icon' ] );
+	    add_filter( 'plugin_row_meta', [ $this, 'dst_row_meta' ], 10, 2 );
 	    
 	}
 
@@ -93,6 +95,9 @@ class MyPlugin_GitHub_Updater {
 			'version' => $new_version_number,
 			'url'     => $new_url,
 			'package' => $new_package,
+			'icons'   => array(
+                'default' => $this->config['icon_url']
+            )
 		);
 	}
 
@@ -144,6 +149,23 @@ class MyPlugin_GitHub_Updater {
 	      'changelog'   => $changelog['body'].'<br>'.$this->get_changelog(),
 	  ];
 	  $info->download_link = str_replace( '{tag}', $changelog['tag_name'], $this->config['zip_url'] );
+
+	  // Add plugin icon
+	    if ( ! empty( $this->config['icon_url'] ) ) {
+	        $info->icons = [
+	            '1x' => $this->config['icon_url'],
+	            '2x' => $this->config['icon_url'], // Use the same image for 2x if no higher resolution is available
+	        ];
+	    }
+
+	    // Add plugin banners
+	    if ( ! empty( $this->config['banner_url'] ) ) {
+	        $info->banners = [
+	            'low'  => $this->config['banner_url'],
+	            'high' => ! empty( $this->config['banner_url_high'] ) ? $this->config['banner_url_high'] : $this->config['banner_url'],
+	        ];
+	    }
+
 	  return $info;
 	}
 
@@ -183,6 +205,16 @@ class MyPlugin_GitHub_Updater {
 	
 		return $plugins;
 	}
+
+	/*
+     * Ajoute une icone à droite da la version dans la vue liste
+     */
+    public function dst_row_meta($links, $file) {
+        if ($this->config['slug'] === $file) {
+            $links[] = '<img src="' . $this->config['icon_url'] . '" alt="Icon" style="width:16px;height:16px;vertical-align:middle;" />';
+        }
+        return $links;
+    }
 	
 }
 
