@@ -40,7 +40,7 @@ class MyPlugin_GitHub_Updater {
 	public function __construct() {
 	    add_filter( 'update_plugins_github.com', [ $this, 'self_update' ], 10, 4 );
 	    add_filter( 'plugins_api', [ $this, 'dst_plugin_info' ], 9999, 3 );
-	    add_filter( 'plugin_row_meta', [ $this, 'dst_row_meta' ], 10, 2 );
+	    //add_filter( 'plugin_row_meta', [ $this, 'dst_row_meta' ], 10, 2 );
 	    
 	}
 

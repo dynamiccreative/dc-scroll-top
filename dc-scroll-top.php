@@ -4,29 +4,75 @@
  * Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
  * Update URI: https://github.com/dynamiccreative/dc-scroll-top
  * Description: Rajoute un bouton scroll to top.
- * Version: 0.3.12
+ * Version: 0.3.13
  * Author: Dynamic Creative
  * Author URI: http://www.dynamic-creative.com
  * GitHub Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
  * Primary Branch: main
+ * Text Domain: dc-scroll-top
+ * Domain Path: /languages
+ * Requires at least: 6.7
+ * Requires PHP: 6.8
  */
 
 
-define( 'DST_VERSION', '0.3.12' );
+define( 'DST_VERSION', '0.3.13' );
 define( 'DST_FILE', __FILE__ );
 define( 'DST_DIR_PATH', plugin_dir_path( DST_FILE ) );
 define( 'DST_DIR_URL', plugin_dir_url( DST_FILE ) );
 
 class Scroll_Top {
+	private $config = [
+	    'slug'          => 'dc-scroll-top/dc-scroll-top.php',
+	    'repo'          => 'dc-scroll-top',
+	    'icon_url'      => 'https://raw.githubusercontent.com/dynamiccreative/dc-scroll-top/main/assets/img/icon-256x256.png',
+	];
+
 	public function initialize() {
 		$this->include_files();
 
 		//add_action( 'admin_enqueue_scripts', [$this, 'load_admin_styles'] );
+		add_filter('plugin_row_meta', [$this,'add_row_meta'], 10, 4);
 	}
 
 	public function include_files() {
 		require_once DST_DIR_PATH . 'inc/update.php';
 	}
+
+	/*public function add_plugin_details_link($plugin_meta, $plugin_file, $plugin_data, $status) {
+	    // Vérifier que le plugin est 'dc-scroll-top/dc-scroll-top.php'
+	    error_log('$slug: '.$plugin_file);
+	    if ($plugin_file === 'dc-scroll-top/dc-scroll-top.php') {
+	        // Construire l'URL pour la popup de détails
+	        $plugin_slug = 'dc-scroll-top'; // Slug du plugin
+	        $details_link = sprintf(
+	            '<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s">%s</a>',
+	            esc_url(admin_url('plugin-install.php?tab=plugin-information&plugin=' . $plugin_slug . '&TB_iframe=true&width=600&height=550')),
+	            esc_attr(sprintf(__('Voir les détails du plugin %s', 'text-domain'), $plugin_data['Name'])),
+	            esc_attr($plugin_data['Name']),
+	            __('Afficher les détails', 'text-domain')
+	        );
+
+	        // Ajouter le lien à droite de la version
+	        $plugin_meta[] = $details_link;
+	    }
+
+	    return $plugin_meta;
+	}*/
+	public function add_row_meta($links, $file, $plugin_data, $status) {
+        if ($this->config['slug'] === $file) {
+            $links[] = sprintf(
+	            '<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s">%s</a>',
+	            esc_url(admin_url('plugin-install.php?tab=plugin-information&plugin=' . $this->config['repo'] . '&TB_iframe=true&width=600&height=550')),
+	            esc_attr(sprintf(__('Voir les détails du plugin %s', 'text-domain'), $plugin_data['Name'])),
+	            esc_attr($plugin_data['Name']),
+	            __('Afficher les détails', 'text-domain')
+	        );
+	        $links[] = '<img src="' . $this->config['icon_url'] . '" alt="Icon" style="width:16px;height:16px;vertical-align:middle;" />';
+        }
+        return $links;
+    }
+
 }
 $st = new Scroll_Top();
 $st->initialize();
