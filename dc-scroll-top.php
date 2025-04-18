@@ -4,8 +4,8 @@
  * Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
  * Update URI: https://github.com/dynamiccreative/dc-scroll-top
  * Description: Rajoute un bouton scroll to top.
- * Version: 0.3.13
- * Author: Dynamic Creative
+ * Version: 0.3.14
+ * Author: Team dynamic Creative
  * Author URI: http://www.dynamic-creative.com
  * GitHub Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
  * Primary Branch: main
@@ -16,7 +16,7 @@
  */
 
 
-define( 'DST_VERSION', '0.3.13' );
+define( 'DST_VERSION', '0.3.14' );
 define( 'DST_FILE', __FILE__ );
 define( 'DST_DIR_PATH', plugin_dir_path( DST_FILE ) );
 define( 'DST_DIR_URL', plugin_dir_url( DST_FILE ) );
@@ -62,13 +62,12 @@ class Scroll_Top {
 	public function add_row_meta($links, $file, $plugin_data, $status) {
         if ($this->config['slug'] === $file) {
             $links[] = sprintf(
-	            '<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s">%s</a>',
+	            '<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s"><img src="' . $this->config['icon_url'] . '" alt="Icon" style="width:16px;height:16px;vertical-align:middle;" /></a>',
 	            esc_url(admin_url('plugin-install.php?tab=plugin-information&plugin=' . $this->config['repo'] . '&TB_iframe=true&width=600&height=550')),
 	            esc_attr(sprintf(__('Voir les détails du plugin %s', 'text-domain'), $plugin_data['Name'])),
 	            esc_attr($plugin_data['Name']),
 	            __('Afficher les détails', 'text-domain')
 	        );
-	        $links[] = '<img src="' . $this->config['icon_url'] . '" alt="Icon" style="width:16px;height:16px;vertical-align:middle;" />';
         }
         return $links;
     }
