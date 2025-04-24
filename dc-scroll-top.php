@@ -20,12 +20,12 @@ define( 'DST_VERSION', '0.3.15' );
 define( 'DST_FILE', __FILE__ );
 define( 'DST_DIR_PATH', plugin_dir_path( DST_FILE ) );
 define( 'DST_DIR_URL', plugin_dir_url( DST_FILE ) );
-define( 'ACCESS_TOKEN', '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');
 
 class Scroll_Top {
 	private $config = [
 	    'slug'          => 'dc-scroll-top/dc-scroll-top.php',
 	    'repo'          => 'dc-scroll-top',
+	    'access_token'  => '',
 	    'icon_url'      => 'https://raw.githubusercontent.com/dynamiccreative/dc-scroll-top/main/assets/img/icon-256x256.png',
 	    'banner_url'      => 'https://raw.githubusercontent.com/dynamiccreative/dc-scroll-top/main/assets/img/banner-1544x500.png'
 	];
@@ -45,7 +45,6 @@ class Scroll_Top {
 	public function update_plugin() {
         require_once DST_DIR_PATH . 'inc/GitHubUpdater.php';
         $gitHubUpdater = new DstGitHubUpdater(DST_FILE);
-        $gitHubUpdater->setAccessToken(ACCESS_TOKEN);
         $gitHubUpdater->setPluginIcon($this->config['icon_url']);
         $gitHubUpdater->setPluginBannerSmall($this->config['banner_url']);
         $gitHubUpdater->setPluginBannerLarge($this->config['banner_url']);
