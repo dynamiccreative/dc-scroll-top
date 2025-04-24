@@ -1,22 +1,24 @@
 <?php
+//namespace RYSE\DCScrollTop;
+
 /**
  * Plugin Name: DC Scroll Top
  * Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
  * Update URI: https://github.com/dynamiccreative/dc-scroll-top
  * Description: Rajoute un bouton scroll to top.
- * Version: 0.3.14
+ * Version: 0.3.15
  * Author: Team dynamic Creative
  * Author URI: http://www.dynamic-creative.com
  * GitHub Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
  * Primary Branch: main
  * Text Domain: dc-scroll-top
  * Domain Path: /languages
- * Requires at least: 6.7
- * Requires PHP: 6.8
+ * Tested up to:       6.8
+ * Requires at least:  6.7
  */
 
 
-define( 'DST_VERSION', '0.3.14' );
+define( 'DST_VERSION', '0.3.15' );
 define( 'DST_FILE', __FILE__ );
 define( 'DST_DIR_PATH', plugin_dir_path( DST_FILE ) );
 define( 'DST_DIR_URL', plugin_dir_url( DST_FILE ) );
@@ -25,60 +27,47 @@ class Scroll_Top {
 	private $config = [
 	    'slug'          => 'dc-scroll-top/dc-scroll-top.php',
 	    'repo'          => 'dc-scroll-top',
+	    'access_token'  => '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',
 	    'icon_url'      => 'https://raw.githubusercontent.com/dynamiccreative/dc-scroll-top/main/assets/img/icon-256x256.png',
+	    'banner_url'      => 'https://raw.githubusercontent.com/dynamiccreative/dc-scroll-top/main/assets/img/banner-1544x500.png'
 	];
 
 	public function initialize() {
-		$this->include_files();
+		//$this->include_files();
+		$this->update_plugin();
 
 		//add_action( 'admin_enqueue_scripts', [$this, 'load_admin_styles'] );
 		add_filter('plugin_row_meta', [$this,'add_row_meta'], 10, 4);
 	}
 
 	public function include_files() {
-		require_once DST_DIR_PATH . 'inc/update.php';
+		//require_once DST_DIR_PATH . 'inc/update.php';
 	}
 
-	/*public function add_plugin_details_link($plugin_meta, $plugin_file, $plugin_data, $status) {
-	    // Vérifier que le plugin est 'dc-scroll-top/dc-scroll-top.php'
-	    error_log('$slug: '.$plugin_file);
-	    if ($plugin_file === 'dc-scroll-top/dc-scroll-top.php') {
-	        // Construire l'URL pour la popup de détails
-	        $plugin_slug = 'dc-scroll-top'; // Slug du plugin
-	        $details_link = sprintf(
-	            '<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s">%s</a>',
-	            esc_url(admin_url('plugin-install.php?tab=plugin-information&plugin=' . $plugin_slug . '&TB_iframe=true&width=600&height=550')),
-	            esc_attr(sprintf(__('Voir les détails du plugin %s', 'text-domain'), $plugin_data['Name'])),
-	            esc_attr($plugin_data['Name']),
-	            __('Afficher les détails', 'text-domain')
-	        );
+	public function update_plugin() {
+        require_once DST_DIR_PATH . 'inc/GitHubUpdater.php';
+        $gitHubUpdater = new DstGitHubUpdater(DST_FILE);
+        $gitHubUpdater->setAccessToken($this->config['access_token']);
+        $gitHubUpdater->setPluginIcon($this->config['icon_url']);
+        $gitHubUpdater->setPluginBannerSmall($this->config['banner_url']);
+        $gitHubUpdater->setPluginBannerLarge($this->config['banner_url']);
+        $gitHubUpdater->add();
+    }
 
-	        // Ajouter le lien à droite de la version
-	        $plugin_meta[] = $details_link;
-	    }
-
-	    return $plugin_meta;
-	}*/
 	public function add_row_meta($links, $file, $plugin_data, $status) {
         if ($this->config['slug'] === $file) {
-            $links[] = sprintf(
-	            '<a href="%s" class="thickbox open-plugin-details-modal" aria-label="%s" data-title="%s"><img src="' . $this->config['icon_url'] . '" alt="Icon" style="width:16px;height:16px;vertical-align:middle;" /></a>',
-	            esc_url(admin_url('plugin-install.php?tab=plugin-information&plugin=' . $this->config['repo'] . '&TB_iframe=true&width=600&height=550')),
-	            esc_attr(sprintf(__('Voir les détails du plugin %s', 'text-domain'), $plugin_data['Name'])),
-	            esc_attr($plugin_data['Name']),
-	            __('Afficher les détails', 'text-domain')
-	        );
+            $links[] = '<a href="'.esc_attr($plugin_data['id']).'" class="" target="_blank"><img src="' . $this->config['icon_url'] . '" alt="Icon" style="width:16px;height:16px;vertical-align:middle;"/></a>';
         }
         return $links;
     }
 
 }
-$st = new Scroll_Top();
-$st->initialize();
+$dst = new Scroll_Top();
+$dst->initialize();
 
-add_action('init', 'dcscrolltop_init');
+add_action('init', 'dcscrolltop_assets');
 
-function dcscrolltop_init(){
+function dcscrolltop_assets(){
 	wp_enqueue_style ( 'dcscrolltop', plugin_dir_url( __FILE__ ) . '/assets/css/dcscrolltop.css');
 	wp_enqueue_script( 'dcscrolltop', plugin_dir_url( __FILE__ ) . '/assets/js/jquery.scrollUp.js',['jquery'],'2.1.1',true );
 }
