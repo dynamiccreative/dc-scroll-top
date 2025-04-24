@@ -25,7 +25,7 @@ class Scroll_Top {
 	private $config = [
 	    'slug'          => 'dc-scroll-top/dc-scroll-top.php',
 	    'repo'          => 'dc-scroll-top',
-	    'access_token'  => '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',
+	    'access_token'  => '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',
 	    'icon_url'      => 'https://raw.githubusercontent.com/dynamiccreative/dc-scroll-top/main/assets/img/icon-256x256.png',
 	    'banner_url'      => 'https://raw.githubusercontent.com/dynamiccreative/dc-scroll-top/main/assets/img/banner-1544x500.png'
 	];
