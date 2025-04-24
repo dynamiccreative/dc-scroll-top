@@ -1,6 +1,4 @@
 <?php
-//namespace RYSE\DCScrollTop;
-
 /**
  * Plugin Name: DC Scroll Top
  * Plugin URI: https://github.com/dynamiccreative/dc-scroll-top

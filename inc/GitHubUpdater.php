@@ -1,7 +1,4 @@
 <?php
-
-//namespace RYSE\DCScrollTop;
-
 /**
  * Enable WordPress to check for and update a custom plugin that's hosted in
  * either a public or private repository on GitHub.
