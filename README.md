@@ -11,5 +11,5 @@ Wordpress Move to Top plugin.
 * 6 Icons
 
 ## Author
-* [Dynamic Creative](https://dynamic-creative.com) - Agence digitale & informatique
-* teknopop
+* [Dynamic Creative](https://dynamic-creative.com) - Agence digitale / Infogérance
+* @teknopop-dc
