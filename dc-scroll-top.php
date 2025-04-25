@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
  * Update URI: https://github.com/dynamiccreative/dc-scroll-top
  * Description: Rajoute un bouton scroll to top.
- * Version: 0.3.15
+ * Version: 0.3.16
  * Author: Team dynamic Creative
  * Author URI: http://www.dynamic-creative.com
  * GitHub Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
@@ -16,7 +16,7 @@
  */
 
 
-define( 'DST_VERSION', '0.3.15' );
+define( 'DST_VERSION', '0.3.16' );
 define( 'DST_FILE', __FILE__ );
 define( 'DST_DIR_PATH', plugin_dir_path( DST_FILE ) );
 define( 'DST_DIR_URL', plugin_dir_url( DST_FILE ) );
@@ -85,9 +85,22 @@ function wptuts_add_color_picker( $hook ) {
  * Adds a page in the settings menu
  */
 function dcscrolltop_menu() {
-	add_options_page( 'DC Scroll Top Options', 'DC Scroll Top', 'manage_options', 'dcscrolltop-options', 'dcscrolltop_options' );
+	if ( is_plugin_active('dc-support-technique/dc-support-technique.php') ) {
+		add_submenu_page(
+	        'dc-settings',
+	        'DC Scroll Top Options',
+	        'Scroll Top',
+	        'manage_options',
+	        'dcscrolltop-options',
+	        'dcscrolltop_options',
+			30
+	    );
+	} else {
+		add_options_page( 'DC Scroll Top Options', 'DC Scroll Top', 'manage_options', 'dcscrolltop-options', 'dcscrolltop_options' );
+	}
+	
 }
-add_action( 'admin_menu', 'dcscrolltop_menu' );
+add_action( 'admin_menu', 'dcscrolltop_menu', 20 );
 
 /**
  * Content for the settings page
