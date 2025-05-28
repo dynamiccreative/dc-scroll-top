@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
  * Update URI: https://github.com/dynamiccreative/dc-scroll-top
  * Description: Rajoute un bouton scroll to top.
- * Version: 0.3.16
+ * Version: 0.3.17
  * Author: Team dynamic Creative
  * Author URI: http://www.dynamic-creative.com
  * GitHub Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
@@ -16,7 +16,7 @@
  */
 
 
-define( 'DST_VERSION', '0.3.16' );
+define( 'DST_VERSION', '0.3.17' );
 define( 'DST_FILE', __FILE__ );
 define( 'DST_DIR_PATH', plugin_dir_path( DST_FILE ) );
 define( 'DST_DIR_URL', plugin_dir_url( DST_FILE ) );
@@ -36,6 +36,7 @@ class Scroll_Top {
 
 		//add_action( 'admin_enqueue_scripts', [$this, 'load_admin_styles'] );
 		add_filter('plugin_row_meta', [$this,'add_row_meta'], 10, 4);
+		add_filter( 'admin_footer_text', [ $this, 'admin_footer_text' ] );
 	}
 
 	public function include_files() {
@@ -49,6 +50,34 @@ class Scroll_Top {
         $gitHubUpdater->setPluginBannerSmall($this->config['banner_url']);
         $gitHubUpdater->setPluginBannerLarge($this->config['banner_url']);
         $gitHubUpdater->add();
+    }
+
+    /**
+     * Admin footer text.
+     *
+     * Modifies the "Thank you" text displayed in the admin footer.
+     *
+     * Fired by `admin_footer_text` filter.
+     *
+     * @since 1.0.0
+     * @access public
+     *
+     * @param string $footer_text The content that will be printed.
+     *
+     * @return string The content that will be printed.
+     */
+    public function admin_footer_text( $footer_text ) {
+        $current_screen = get_current_screen();
+        //var_dump($current_screen);
+        if ($current_screen && $current_screen->id === 'dc-plus_page_dcscrolltop-options' || $current_screen->id === 'settings_page_dcscrolltop-options') {
+            $text = sprintf(
+                __( 'Enjoyed %1$s? Please leave us a %2$s rating. We really appreciate your support!', 'geo-prestations' ),
+                '<strong>DC Scroll Top</strong>',
+                '<a href="https://github.com/dynamiccreative" target="_blank">&#9733;&#9733;&#9733;&#9733;&#9733;</a>'
+            );
+            return $text;
+        }
+        return $footer_text;
     }
 
 	public function add_row_meta($links, $file, $plugin_data, $status) {
@@ -323,9 +352,13 @@ function returnColor($c){
  */
 
 function dcscrolltop_settings_link($links) { 
-	  $settings_link = sprintf('<a href="options-general.php?page=dcscrolltop-options">%s</a>', __("Settings", "dcscrolltop")); 
-	  array_unshift($links, $settings_link); 
-	  return $links; 
+	$link = 'options-general.php?page=dcscrolltop-options';
+	if ( is_plugin_active('dc-support-technique/dc-support-technique.php') ) {
+		$link = 'admin.php?page=dcscrolltop-options';
+	}
+	$settings_link = sprintf('<a href="'.$link.'">%s</a>', __("Settings", "dcscrolltop")); 
+	array_unshift($links, $settings_link); 
+	return $links; 
 }
 $plugin = plugin_basename(__FILE__); 
 add_filter("plugin_action_links_$plugin", 'dcscrolltop_settings_link' );
