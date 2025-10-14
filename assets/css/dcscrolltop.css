@@ -1,3 +1,30 @@
-/* MOVETOTOP */
-#scrollUp { visibility:hidden; opacity: 0; transition: all 350ms ease;text-indent:-9999px; overflow:hidden; } #scrollUp:hover {opacity: .8;}
-.scrollup #scrollUp {opacity:1; visibility: visible;}
+/**
+ * Styles pour DC Scroll Top
+ */
+
+/* Bouton scroll to top */
+#scrollUp {
+    position: fixed;
+    z-index: 2147483647;
+    display: block;
+    cursor: pointer;
+    text-decoration: none;
+    border: none;
+    outline: none;
+}
+
+/* États du bouton */
+#scrollUp:hover {
+    opacity: 0.8 !important;
+}
+
+/* Animation slide */
+.scrollup-slide #scrollUp {
+    transition: bottom 350ms ease;
+}
+
+/* Classe pour l'état visible */
+.scrollup #scrollUp {
+    opacity: 1;
+    visibility: visible;
+}
