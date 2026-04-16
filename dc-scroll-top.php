@@ -124,6 +124,13 @@ class DC_Scroll_Top {
     public function enqueue_frontend_assets() {
         $options = $this->get_options();
 
+        wp_enqueue_style(
+            'dc-scroll-top',
+            DST_DIR_URL . 'assets/css/dcscrolltop.css',
+            [],
+            DST_VERSION
+        );
+
         wp_enqueue_script(
             'dc-scroll-top',
             DST_DIR_URL . 'assets/js/scrolltop.js',
