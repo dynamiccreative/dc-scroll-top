@@ -11,6 +11,11 @@
     text-decoration: none;
     border: none;
     outline: none;
+    -webkit-tap-highlight-color: transparent;
+}
+
+#scrollUp:focus {
+    outline: none;
 }
 
 /* Etats du bouton */
@@ -18,10 +23,11 @@
     opacity: 0.8 !important;
 }
 
-/* Focus visible pour accessibilite clavier */
+/* Focus visible uniquement pour navigation clavier */
 #scrollUp:focus-visible {
-    outline: 2px solid currentColor;
-    outline-offset: 2px;
+    outline: 2px solid rgba(0,0,0,.3);
+    outline-offset: 4px;
+    border-radius: 50%;
 }
 
 /* Animation slide */

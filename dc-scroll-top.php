@@ -172,7 +172,6 @@ class DC_Scroll_Top {
         echo "  overflow: hidden;\n";
         echo "}\n";
         echo "#scrollUp:hover { opacity: 0.8; }\n";
-        echo "#scrollUp:focus { outline: 2px solid {$options['color']}; outline-offset: 2px; }\n";
         echo ".scrollup #scrollUp { opacity: 1; visibility: visible; }\n";
         echo "@media screen and (max-width: {$options['responsive_width']}px) {\n";
         echo "  #scrollUp { display: none !important; }\n";
