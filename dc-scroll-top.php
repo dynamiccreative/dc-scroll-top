@@ -84,7 +84,6 @@ class DC_Scroll_Top {
         if ($this->get_option('active') && apply_filters('dc_scroll_top_show', true)) {
             add_action('wp_enqueue_scripts', [$this, 'enqueue_frontend_assets']);
             add_action('wp_head', [$this, 'output_custom_css']);
-            add_action('wp_footer', [$this, 'output_script'], 100);
         }
 
         // Hooks pour l'admin
@@ -123,14 +122,22 @@ class DC_Scroll_Top {
      * Charge les assets du frontend
      */
     public function enqueue_frontend_assets() {
-        wp_enqueue_script('jquery');
+        $options = $this->get_options();
+
         wp_enqueue_script(
             'dc-scroll-top',
-            DST_DIR_URL . 'assets/js/jquery.scrollUp.js',
-            ['jquery'],
+            DST_DIR_URL . 'assets/js/scrolltop.js',
+            [],
             DST_VERSION,
             true
         );
+
+        wp_localize_script('dc-scroll-top', 'DC_STT_Front', [
+            'animation'      => $options['animation'],
+            'scrollDistance'  => (int) $options['scroll_distance'],
+            'scrollSpeed'    => (int) $options['scroll_speed'],
+            'scrollTitle'    => __('Retour en haut', 'dc-scroll-top'),
+        ]);
     }
 
     /**
@@ -165,24 +172,6 @@ class DC_Scroll_Top {
         echo "}\n";
         echo "</style>\n";
         echo "<!-- End DC Scroll Top CSS -->\n";
-    }
-
-    /**
-     * Genere le script JavaScript
-     */
-    public function output_script() {
-        $options = $this->get_options();
-        echo "<script type='text/javascript'>\n";
-        echo "(function($) {\n";
-        echo "  $.scrollUp({\n";
-        echo "    animation: '{$options['animation']}',\n";
-        echo "    scrollDistance: {$options['scroll_distance']},\n";
-        echo "    scrollSpeed: {$options['scroll_speed']},\n";
-        echo "    scrollText: '',\n";
-        echo "    scrollTitle: '" . esc_js(__('Retour en haut', 'dc-scroll-top')) . "'\n";
-        echo "  });\n";
-        echo "})(jQuery);\n";
-        echo "</script>\n";
     }
 
     /**
