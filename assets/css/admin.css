@@ -1,0 +1,317 @@
+/* ─────────────────────────────────────────────────────────────────────────────
+   DC Scroll Top — admin.css
+   Design calé sur DC Plus (Breadcrumb Manager)
+   ───────────────────────────────────────────────────────────────────────── */
+
+/* ── Reset contexte WP ───────────────────────────────────────────────────── */
+.dc-stt-wrap * { box-sizing: border-box; }
+.dc-stt-wrap { margin: 0; padding: 15px; }
+
+/* ── Header ──────────────────────────────────────────────────────────────── */
+.dc-stt-header {
+    background: linear-gradient(135deg, #6330CC 0%, #3B5BDB 100%);
+    border-radius: 6px;
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+}
+
+.dc-stt-header-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+
+.dc-stt-header-icon {
+    width: 44px;
+    height: 44px;
+    background: rgba(255,255,255,.18);
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 22px;
+    line-height: 1;
+}
+
+.dc-stt-header h1 {
+    color: #fff !important;
+    font-size: 20px;
+    font-weight: 600;
+    margin: 0 0 3px;
+    padding: 0;
+    line-height: 1.2;
+}
+
+.dc-stt-header-sub {
+    color: rgba(255,255,255,.7);
+    font-size: 12px;
+    margin: 0;
+}
+
+.dc-stt-header-badge {
+    background: rgba(255,255,255,.18);
+    color: #fff;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 12px;
+    border-radius: 20px;
+    letter-spacing: .4px;
+    text-transform: uppercase;
+}
+
+/* ── Conteneur principal ──────────────────────────────────────────────────── */
+.dc-stt-body {
+    background: #f0f0f1;
+    padding: 0 0 32px;
+}
+
+/* ── Cards ────────────────────────────────────────────────────────────────── */
+.dc-stt-card {
+    background: #fff;
+    border-radius: 6px;
+    border: 1px solid #e8eaf0;
+    margin-bottom: 16px;
+    overflow: hidden;
+}
+
+.dc-stt-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 16px 24px;
+    border-bottom: 1px solid #f0f0f2;
+    background: #fafbfc;
+}
+
+.dc-stt-card-header h2 {
+    margin: 0;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1d2327;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.dc-stt-card-header h2 span { font-size: 16px; }
+
+.dc-stt-card-body {
+    padding: 20px 24px;
+}
+
+/* ── Table de settings ───────────────────────────────────────────────────── */
+.dc-stt-settings-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.dc-stt-settings-table tr + tr td,
+.dc-stt-settings-table tr + tr th {
+    border-top: 1px solid #f3f4f6;
+}
+
+.dc-stt-settings-table th {
+    font-size: 13px;
+    font-weight: 500;
+    color: #1d2327;
+    padding: 14px 14px 14px 0;
+    text-align: left;
+    vertical-align: middle;
+    white-space: nowrap;
+    width: 160px;
+}
+
+.dc-stt-settings-table td {
+    padding: 14px 0;
+    vertical-align: middle;
+    font-size: 13px;
+}
+
+.dc-stt-settings-table tr:hover {
+    background: #f9f7ff;
+}
+
+/* ── Inputs ───────────────────────────────────────────────────────────────── */
+.dc-stt-input {
+    padding: 7px 10px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 5px;
+    font-size: 13px;
+    color: #1d2327;
+    background: #fff;
+    transition: border-color .2s, box-shadow .2s;
+}
+
+.dc-stt-input:focus {
+    border-color: #6330CC;
+    box-shadow: 0 0 0 3px rgba(99,48,204,.12);
+    outline: none;
+}
+
+.dc-stt-input::placeholder { color: #c4c8d0; }
+
+input[type="number"].dc-stt-input { width: 90px; }
+
+.dc-stt-unit {
+    display: inline-block;
+    font-size: 12px;
+    color: #6b7280;
+    margin-left: 6px;
+    font-weight: 500;
+}
+
+/* ── Select ──────────────────────────────────────────────────────────────── */
+select.dc-stt-input {
+    min-width: 140px;
+    cursor: pointer;
+    appearance: auto;
+}
+
+/* ── Radio SVG ───────────────────────────────────────────────────────────── */
+.dc-stt-radio-svg {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.dc-stt-radio-svg label {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 1.5px solid #e5e7eb;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: border-color .2s, box-shadow .2s, background .2s;
+    background: #fff;
+}
+
+.dc-stt-radio-svg label:hover {
+    border-color: #6330CC;
+    background: #f9f7ff;
+}
+
+.dc-stt-radio-svg input[type="radio"] {
+    position: absolute;
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+.dc-stt-radio-svg input[type="radio"]:checked + svg {
+    fill: #6330CC;
+}
+
+.dc-stt-radio-svg label:has(input:checked) {
+    border-color: #6330CC;
+    box-shadow: 0 0 0 3px rgba(99,48,204,.12);
+    background: #f5f3ff;
+}
+
+.dc-stt-radio-svg svg {
+    width: 24px;
+    height: 24px;
+    fill: #6b7280;
+    transition: fill .2s;
+}
+
+/* ── Notice succès ────────────────────────────────────────────────────────── */
+.dc-stt-notice-success {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    border-radius: 6px;
+    padding: 12px 16px;
+    margin-bottom: 16px;
+    font-size: 13px;
+    color: #15803d;
+    font-weight: 500;
+}
+
+/* ── Barre de sauvegarde fixe en bas ─────────────────────────────────────── */
+.dc-stt-save-bar {
+    position: sticky;
+    bottom: 0;
+    z-index: 100;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #fff;
+    padding: 14px 24px;
+    box-shadow: 0 -2px 16px rgba(0,0,0,.08);
+    border-radius: 6px;
+}
+
+.dc-stt-btn-primary {
+    background: linear-gradient(135deg, #6330CC, #3B5BDB);
+    color: #fff;
+    border: none;
+    border-radius: 25px;
+    padding: 12px 22px;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    transition: opacity .2s, box-shadow .2s;
+}
+
+.dc-stt-btn-primary:hover {
+    opacity: .92;
+    box-shadow: 0 4px 12px rgba(99,48,204,.3);
+}
+
+/* ── Sidebar À propos ────────────────────────────────────────────────────── */
+.dc-stt-sidebar {
+    background: #fff;
+    border: 1px solid #e8eaf0;
+    border-radius: 6px;
+    padding: 24px;
+}
+
+.dc-stt-sidebar h3 {
+    margin: 0 0 10px;
+    font-size: 13px;
+    font-weight: 600;
+    color: #1d2327;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+}
+
+.dc-stt-sidebar p {
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.6;
+    margin: 0 0 14px;
+}
+
+.dc-stt-sidebar img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+/* ── Layout 2 colonnes ───────────────────────────────────────────────────── */
+.dc-stt-layout {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+}
+
+.dc-stt-main { flex: 2; min-width: 0; }
+.dc-stt-aside { flex: 0 0 280px; }
+
+/* ── Color picker override ───────────────────────────────────────────────── */
+.dc-stt-card-body .wp-picker-container .wp-color-result {
+    border-radius: 5px;
+}

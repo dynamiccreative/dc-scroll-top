@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
   * Update URI: https://github.com/dynamiccreative/dc-scroll-top
  * Description: Ajoute un bouton scroll to top personnalisable.
- * Version: 1.0.0
+ * Version: 1.1.0
  * Author: Team Dynamic Creative
  * Author URI: http://www.dynamic-creative.com
  * GitHub Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Constantes du plugin
-define('DST_VERSION', '1.0.0');
+define('DST_VERSION', '1.1.0');
 define('DST_FILE', __FILE__);
 define('DST_DIR_PATH', plugin_dir_path(DST_FILE));
 define('DST_DIR_URL', plugin_dir_url(DST_FILE));
@@ -85,7 +85,6 @@ class DC_Scroll_Top {
         // Hooks pour l'admin
         add_action('admin_menu', [$this, 'add_admin_menu']);
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
-        add_action('admin_head', [$this, 'output_admin_css']);
         
         // Filtres
         add_filter('plugin_action_links_' . plugin_basename(DST_FILE), [$this, 'add_settings_link']);
@@ -208,97 +207,140 @@ class DC_Scroll_Top {
         }
 
         // Traitement du formulaire
+        $saved = false;
         if (isset($_POST['submit']) && wp_verify_nonce($_POST['_wpnonce'], 'dcscrolltop_save')) {
             $this->save_options($_POST);
-            echo '<div class="updated"><p><strong>' . __('Settings saved.', 'dc-scroll-top') . '</strong></p></div>';
+            $saved = true;
         }
 
         $options = $this->get_options();
         ?>
-        <div class="wrap">
-            <h1><?php _e('DC Scroll Top Settings', 'dc-scroll-top'); ?></h1>
-            <p><?php _e('Ce plugin ajoute un bouton Scroll to Top en bas de votre site.', 'dc-scroll-top'); ?></p>
+        <div class="dc-stt-wrap">
 
-            <div class="dc-admin-container">
-                <div class="dc-admin-left">
-                    <form method="post" action="">
-                        <?php wp_nonce_field('dcscrolltop_save'); ?>
-                        
-                        <div class="st-section">
-                            <h2><?php _e('Responsive', 'dc-scroll-top'); ?></h2>
-                            <table class="form-table">
-                                <tr>
-                                    <th scope="row"><?php _e('Breakpoint Mobile :', 'dc-scroll-top'); ?></th>
-                                    <td>
-                                        <input type="number" name="responsive_width" value="<?php echo esc_attr($options['responsive_width']); ?>" min="1" max="2000" /> px
-                                    </td>
-                                </tr>
-                            </table>
+            <!-- ══ Header ══════════════════════════════════════════════════ -->
+            <div class="dc-stt-header">
+                <div class="dc-stt-header-left">
+                    <div class="dc-stt-header-icon">⬆️</div>
+                    <div>
+                        <h1>Scroll Top</h1>
+                        <p class="dc-stt-header-sub"><?php _e('Bouton scroll to top personnalisable', 'dc-scroll-top'); ?></p>
+                    </div>
+                </div>
+                <span class="dc-stt-header-badge">v<?php echo DST_VERSION; ?></span>
+            </div>
+
+            <div class="dc-stt-body">
+
+                <?php if ($saved) : ?>
+                    <div class="dc-stt-notice-success">✅ <?php _e('Configuration enregistrée.', 'dc-scroll-top'); ?></div>
+                <?php endif; ?>
+
+                <form method="post" action="">
+                    <?php wp_nonce_field('dcscrolltop_save'); ?>
+
+                    <div class="dc-stt-layout">
+                        <div class="dc-stt-main">
+
+                            <!-- ══ Card Responsive ═════════════════════════ -->
+                            <div class="dc-stt-card">
+                                <div class="dc-stt-card-header">
+                                    <h2><span>📱</span> <?php _e('Responsive', 'dc-scroll-top'); ?></h2>
+                                </div>
+                                <div class="dc-stt-card-body">
+                                    <table class="dc-stt-settings-table">
+                                        <tr>
+                                            <th><?php _e('Breakpoint Mobile', 'dc-scroll-top'); ?></th>
+                                            <td>
+                                                <input type="number" name="responsive_width" value="<?php echo esc_attr($options['responsive_width']); ?>" min="1" max="2000" class="dc-stt-input" />
+                                                <span class="dc-stt-unit">px</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <!-- ══ Card Style ══════════════════════════════ -->
+                            <div class="dc-stt-card">
+                                <div class="dc-stt-card-header">
+                                    <h2><span>🎨</span> <?php _e('Apparence', 'dc-scroll-top'); ?></h2>
+                                </div>
+                                <div class="dc-stt-card-body">
+                                    <table class="dc-stt-settings-table">
+                                        <tr>
+                                            <th><?php _e('Couleur', 'dc-scroll-top'); ?></th>
+                                            <td>
+                                                <input type="text" name="color" value="<?php echo esc_attr($options['color']); ?>" class="color-field" />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><?php _e('Position bas', 'dc-scroll-top'); ?></th>
+                                            <td>
+                                                <input type="number" name="pos_bottom" value="<?php echo esc_attr($options['pos_bottom']); ?>" min="0" max="100" class="dc-stt-input" />
+                                                <span class="dc-stt-unit">px</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><?php _e('Position droite', 'dc-scroll-top'); ?></th>
+                                            <td>
+                                                <input type="number" name="pos_right" value="<?php echo esc_attr($options['pos_right']); ?>" min="0" max="100" class="dc-stt-input" />
+                                                <span class="dc-stt-unit">px</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><?php _e('Taille', 'dc-scroll-top'); ?></th>
+                                            <td>
+                                                <input type="number" name="size" value="<?php echo esc_attr($options['size']); ?>" min="20" max="100" class="dc-stt-input" />
+                                                <span class="dc-stt-unit">px</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><?php _e('Animation', 'dc-scroll-top'); ?></th>
+                                            <td>
+                                                <select name="animation" class="dc-stt-input">
+                                                    <option value="fade" <?php selected($options['animation'], 'fade'); ?>>Fade</option>
+                                                    <option value="slide" <?php selected($options['animation'], 'slide'); ?>>Slide</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><?php _e('Icône', 'dc-scroll-top'); ?></th>
+                                            <td>
+                                                <div class="dc-stt-radio-svg">
+                                                    <?php foreach ($this->svg_styles as $style_id => $svg_path): ?>
+                                                        <label>
+                                                            <input type="radio" name="style" value="<?php echo $style_id; ?>" <?php checked($options['style'], $style_id); ?> />
+                                                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                                <path d="<?php echo esc_attr($svg_path); ?>" />
+                                                            </svg>
+                                                        </label>
+                                                    <?php endforeach; ?>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
                         </div>
 
-                        <div class="st-section">
-                            <h2><?php _e('Style', 'dc-scroll-top'); ?></h2>
-                            <table class="form-table">
-                                <tr>
-                                    <th scope="row"><?php _e('Color:', 'dc-scroll-top'); ?></th>
-                                    <td>
-                                        <input type="text" name="color" value="<?php echo esc_attr($options['color']); ?>" class="color-field" />
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"><?php _e('Bottom position:', 'dc-scroll-top'); ?></th>
-                                    <td>
-                                        <input type="number" name="pos_bottom" value="<?php echo esc_attr($options['pos_bottom']); ?>" min="0" max="100" /> px
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"><?php _e('Right position:', 'dc-scroll-top'); ?></th>
-                                    <td>
-                                        <input type="number" name="pos_right" value="<?php echo esc_attr($options['pos_right']); ?>" min="0" max="100" /> px
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"><?php _e('Width:', 'dc-scroll-top'); ?></th>
-                                    <td>
-                                        <input type="number" name="size" value="<?php echo esc_attr($options['size']); ?>" min="20" max="100" /> px
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"><?php _e('Animation:', 'dc-scroll-top'); ?></th>
-                                    <td>
-                                        <select name="animation">
-                                            <option value="fade" <?php selected($options['animation'], 'fade'); ?>><?php _e('Fade', 'dc-scroll-top'); ?></option>
-                                            <option value="slide" <?php selected($options['animation'], 'slide'); ?>><?php _e('Slide', 'dc-scroll-top'); ?></option>
-                                        </select>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <th scope="row"><?php _e('Style:', 'dc-scroll-top'); ?></th>
-                                    <td class="st-radio-svg">
-                                        <?php foreach ($this->svg_styles as $style_id => $svg_path): ?>
-                                            <label>
-                                                <input type="radio" name="style" value="<?php echo $style_id; ?>" <?php checked($options['style'], $style_id); ?> />
-                                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="20" height="20">
-                                                    <path d="<?php echo esc_attr($svg_path); ?>" />
-                                                </svg>
-                                            </label>
-                                        <?php endforeach; ?>
-                                    </td>
-                                </tr>
-                            </table>
+                        <!-- ══ Sidebar ═════════════════════════════════════ -->
+                        <div class="dc-stt-aside">
+                            <div class="dc-stt-sidebar">
+                                <h3><?php _e('À propos', 'dc-scroll-top'); ?></h3>
+                                <p><?php _e('Agence Web créée en 1999. Conception de sites Internet, Mobile, développement et bien d\'autres...', 'dc-scroll-top'); ?></p>
+                                <a href="https://www.dynamic-creative.com" target="_blank">
+                                    <img src="<?php echo DST_DIR_URL; ?>assets/img/logo.png" alt="dynamic-creative.com" width="200" height="44" />
+                                </a>
+                            </div>
                         </div>
+                    </div>
 
-                        <?php submit_button(); ?>
-                    </form>
-                </div>
+                    <!-- ══ Save bar ════════════════════════════════════════ -->
+                    <div class="dc-stt-save-bar">
+                        <button type="submit" name="submit" value="1" class="dc-stt-btn-primary">💾 <?php _e('Enregistrer', 'dc-scroll-top'); ?></button>
+                    </div>
 
-                <div class="dc-admin-right">
-                    <h3><?php _e('À propos de Dynamic Creative', 'dc-scroll-top'); ?></h3>
-                    <p><?php _e('Agence Web créée en 1999. Conception de sites Internet, Mobile, développement et bien d\'autres...', 'dc-scroll-top'); ?></p>
-                    <p><a href="https://www.dynamic-creative.com" target="_blank">
-                        <img src="<?php echo DST_DIR_URL; ?>assets/img/logo.png" alt="dynamic-creative.com" width="200" height="44" />
-                    </a></p>
-                </div>
+                </form>
             </div>
         </div>
         <?php
@@ -310,6 +352,12 @@ class DC_Scroll_Top {
     public function enqueue_admin_assets($hook) {
         if (strpos($hook, 'dcscrolltop-options') !== false) {
             wp_enqueue_style('wp-color-picker');
+            wp_enqueue_style(
+                'dc-scroll-top-admin',
+                DST_DIR_URL . 'assets/css/admin.css',
+                [],
+                DST_VERSION
+            );
             wp_enqueue_script(
                 'dc-scroll-top-admin',
                 DST_DIR_URL . 'assets/js/admin.js',
@@ -317,22 +365,6 @@ class DC_Scroll_Top {
                 DST_VERSION,
                 true
             );
-        }
-    }
-
-    /**
-     * CSS pour l'administration
-     */
-    public function output_admin_css() {
-        if (isset($_GET['page']) && $_GET['page'] === 'dcscrolltop-options') {
-            echo '<style type="text/css">';
-            echo '.dc-admin-container { display: flex; gap: 20px; }';
-            echo '.dc-admin-left { flex: 2; }';
-            echo '.dc-admin-right { flex: 1; background: #f9f9f9; padding: 20px; border: 1px solid #ddd; }';
-            echo '.st-section { background: #f0f0f0; padding: 20px; margin-bottom: 20px; }';
-            echo '.st-radio-svg label { margin-right: 10px; display: inline-block; }';
-            echo '.st-radio-svg svg { vertical-align: middle; cursor: pointer; }';
-            echo '</style>';
         }
     }
 
