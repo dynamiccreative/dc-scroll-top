@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
   * Update URI: https://github.com/dynamiccreative/dc-scroll-top
  * Description: Ajoute un bouton scroll to top personnalisable.
- * Version: 2.0.0
+ * Version: 2.0.1
  * Author: Team Dynamic Creative
  * Author URI: http://www.dynamic-creative.com
  * GitHub Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
@@ -21,7 +21,7 @@ if (!defined('ABSPATH')) {
 }
 
 // Constantes du plugin
-define('DST_VERSION', '2.0.0');
+define('DST_VERSION', '2.0.1');
 define('DST_FILE', __FILE__);
 define('DST_DIR_PATH', plugin_dir_path(DST_FILE));
 define('DST_DIR_URL', plugin_dir_url(DST_FILE));
