@@ -4,7 +4,7 @@
  * Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
   * Update URI: https://github.com/dynamiccreative/dc-scroll-top
  * Description: Ajoute un bouton scroll to top personnalisable.
- * Version: 1.1.0
+ * Version: 2.0.0
  * Author: Team Dynamic Creative
  * Author URI: http://www.dynamic-creative.com
  * GitHub Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
@@ -15,13 +15,13 @@
  * Requires at least: 6.7
  */
 
-// Sécurité : empêcher l'accès direct
+// Securite : empecher l'acces direct
 if (!defined('ABSPATH')) {
     exit;
 }
 
 // Constantes du plugin
-define('DST_VERSION', '1.1.0');
+define('DST_VERSION', '2.0.0');
 define('DST_FILE', __FILE__);
 define('DST_DIR_PATH', plugin_dir_path(DST_FILE));
 define('DST_DIR_URL', plugin_dir_url(DST_FILE));
@@ -30,18 +30,21 @@ define('DST_DIR_URL', plugin_dir_url(DST_FILE));
  * Classe principale du plugin DC Scroll Top
  */
 class DC_Scroll_Top {
-    
+
     /**
-     * Options par défaut
+     * Options par defaut
      */
     private $default_options = [
+        'active'           => '1',
         'responsive_width' => '650',
-        'color' => '#000000',
-        'pos_bottom' => '10',
-        'pos_right' => '10',
-        'size' => '40',
-        'animation' => 'fade',
-        'style' => '1'
+        'color'            => '#000000',
+        'pos_bottom'       => '10',
+        'pos_right'        => '10',
+        'size'             => '40',
+        'animation'        => 'fade',
+        'style'            => '1',
+        'scroll_distance'  => '300',
+        'scroll_speed'     => '300',
     ];
 
     private $config = [
@@ -77,15 +80,17 @@ class DC_Scroll_Top {
     public function init() {
         $this->update_plugin();
 
-        // Hooks pour le frontend
-        add_action('wp_enqueue_scripts', [$this, 'enqueue_frontend_assets']);
-        add_action('wp_head', [$this, 'output_custom_css']);
-        add_action('wp_footer', [$this, 'output_script'], 100);
+        // Hooks pour le frontend (seulement si actif)
+        if ($this->get_option('active') && apply_filters('dc_scroll_top_show', true)) {
+            add_action('wp_enqueue_scripts', [$this, 'enqueue_frontend_assets']);
+            add_action('wp_head', [$this, 'output_custom_css']);
+            add_action('wp_footer', [$this, 'output_script'], 100);
+        }
 
         // Hooks pour l'admin
         add_action('admin_menu', [$this, 'add_admin_menu']);
         add_action('admin_enqueue_scripts', [$this, 'enqueue_admin_assets']);
-        
+
         // Filtres
         add_filter('plugin_action_links_' . plugin_basename(DST_FILE), [$this, 'add_settings_link']);
         add_filter('plugin_row_meta', [$this,'add_row_meta'], 10, 4);
@@ -120,22 +125,22 @@ class DC_Scroll_Top {
     public function enqueue_frontend_assets() {
         wp_enqueue_script('jquery');
         wp_enqueue_script(
-            'dc-scroll-top', 
-            DST_DIR_URL . 'assets/js/jquery.scrollUp.js', 
-            ['jquery'], 
-            DST_VERSION, 
+            'dc-scroll-top',
+            DST_DIR_URL . 'assets/js/jquery.scrollUp.js',
+            ['jquery'],
+            DST_VERSION,
             true
         );
     }
 
     /**
-     * Génère le CSS personnalisé
+     * Genere le CSS personnalise
      */
     public function output_custom_css() {
         $options = $this->get_options();
         $svg_path = $this->get_svg_style($options['style']);
         $encoded_color = str_replace('#', '%23', $options['color']);
-        
+
         echo "<!-- DC Scroll Top CSS -->\n";
         echo "<style type='text/css'>\n";
         echo ".scrollup-slide #scrollUp { bottom: -" . ($options['pos_bottom'] + $options['size']) . "px; }\n";
@@ -150,10 +155,10 @@ class DC_Scroll_Top {
         echo "  visibility: hidden;\n";
         echo "  opacity: 0;\n";
         echo "  transition: all 350ms ease;\n";
-        echo "  text-indent: -9999px;\n";
         echo "  overflow: hidden;\n";
         echo "}\n";
         echo "#scrollUp:hover { opacity: 0.8; }\n";
+        echo "#scrollUp:focus { outline: 2px solid {$options['color']}; outline-offset: 2px; }\n";
         echo ".scrollup #scrollUp { opacity: 1; visibility: visible; }\n";
         echo "@media screen and (max-width: {$options['responsive_width']}px) {\n";
         echo "  #scrollUp { display: none !important; }\n";
@@ -163,13 +168,18 @@ class DC_Scroll_Top {
     }
 
     /**
-     * Génère le script JavaScript
+     * Genere le script JavaScript
      */
     public function output_script() {
-        $animation = $this->get_option('animation');
+        $options = $this->get_options();
         echo "<script type='text/javascript'>\n";
         echo "(function($) {\n";
-        echo "  $.scrollUp({ animation: '{$animation}' });\n";
+        echo "  $.scrollUp({\n";
+        echo "    animation: '{$options['animation']}',\n";
+        echo "    scrollDistance: {$options['scroll_distance']},\n";
+        echo "    scrollSpeed: {$options['scroll_speed']},\n";
+        echo "    scrollTitle: '" . esc_js(__('Retour en haut', 'dc-scroll-top')) . "'\n";
+        echo "  });\n";
         echo "})(jQuery);\n";
         echo "</script>\n";
     }
@@ -214,6 +224,7 @@ class DC_Scroll_Top {
         }
 
         $options = $this->get_options();
+        $is_active = (bool) $options['active'];
         ?>
         <div class="dc-stt-wrap">
 
@@ -232,7 +243,7 @@ class DC_Scroll_Top {
             <div class="dc-stt-body">
 
                 <?php if ($saved) : ?>
-                    <div class="dc-stt-notice-success">✅ <?php _e('Configuration enregistrée.', 'dc-scroll-top'); ?></div>
+                    <div class="dc-stt-notice-success">✅ <?php _e('Configuration enregistree.', 'dc-scroll-top'); ?></div>
                 <?php endif; ?>
 
                 <form method="post" action="">
@@ -240,6 +251,21 @@ class DC_Scroll_Top {
 
                     <div class="dc-stt-layout">
                         <div class="dc-stt-main">
+
+                            <!-- ══ Card Activation ═════════════════════════ -->
+                            <div class="dc-stt-card">
+                                <div class="dc-stt-card-header">
+                                    <h2><span>⚡</span> <?php _e('Module', 'dc-scroll-top'); ?></h2>
+                                    <label class="dc-stt-toggle-inline" title="<?php esc_attr_e('Activer / desactiver le bouton', 'dc-scroll-top'); ?>">
+                                        <span class="dc-stt-toggle-label-txt" id="dc-stt-toggle-text"><?php echo $is_active ? 'Active' : 'Desactive'; ?></span>
+                                        <div class="dc-stt-toggle">
+                                            <input type="hidden" name="active" value="0">
+                                            <input type="checkbox" name="active" value="1" id="dc-stt-active" <?php checked($is_active); ?>>
+                                            <span class="dc-stt-slider"></span>
+                                        </div>
+                                    </label>
+                                </div>
+                            </div>
 
                             <!-- ══ Card Responsive ═════════════════════════ -->
                             <div class="dc-stt-card">
@@ -259,7 +285,7 @@ class DC_Scroll_Top {
                                 </div>
                             </div>
 
-                            <!-- ══ Card Style ══════════════════════════════ -->
+                            <!-- ══ Card Apparence ══════════════════════════ -->
                             <div class="dc-stt-card">
                                 <div class="dc-stt-card-header">
                                     <h2><span>🎨</span> <?php _e('Apparence', 'dc-scroll-top'); ?></h2>
@@ -294,16 +320,7 @@ class DC_Scroll_Top {
                                             </td>
                                         </tr>
                                         <tr>
-                                            <th><?php _e('Animation', 'dc-scroll-top'); ?></th>
-                                            <td>
-                                                <select name="animation" class="dc-stt-input">
-                                                    <option value="fade" <?php selected($options['animation'], 'fade'); ?>>Fade</option>
-                                                    <option value="slide" <?php selected($options['animation'], 'slide'); ?>>Slide</option>
-                                                </select>
-                                            </td>
-                                        </tr>
-                                        <tr>
-                                            <th><?php _e('Icône', 'dc-scroll-top'); ?></th>
+                                            <th><?php _e('Icone', 'dc-scroll-top'); ?></th>
                                             <td>
                                                 <div class="dc-stt-radio-svg">
                                                     <?php foreach ($this->svg_styles as $style_id => $svg_path): ?>
@@ -321,13 +338,59 @@ class DC_Scroll_Top {
                                 </div>
                             </div>
 
+                            <!-- ══ Card Comportement ═══════════════════════ -->
+                            <div class="dc-stt-card">
+                                <div class="dc-stt-card-header">
+                                    <h2><span>⚙️</span> <?php _e('Comportement', 'dc-scroll-top'); ?></h2>
+                                </div>
+                                <div class="dc-stt-card-body">
+                                    <table class="dc-stt-settings-table">
+                                        <tr>
+                                            <th><?php _e('Animation', 'dc-scroll-top'); ?></th>
+                                            <td>
+                                                <select name="animation" class="dc-stt-input">
+                                                    <option value="fade" <?php selected($options['animation'], 'fade'); ?>>Fade</option>
+                                                    <option value="slide" <?php selected($options['animation'], 'slide'); ?>>Slide</option>
+                                                </select>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><?php _e('Distance d\'apparition', 'dc-scroll-top'); ?></th>
+                                            <td>
+                                                <input type="number" name="scroll_distance" value="<?php echo esc_attr($options['scroll_distance']); ?>" min="50" max="2000" class="dc-stt-input" />
+                                                <span class="dc-stt-unit">px</span>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th><?php _e('Vitesse de remontee', 'dc-scroll-top'); ?></th>
+                                            <td>
+                                                <input type="number" name="scroll_speed" value="<?php echo esc_attr($options['scroll_speed']); ?>" min="100" max="3000" step="100" class="dc-stt-input" />
+                                                <span class="dc-stt-unit">ms</span>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+
                         </div>
 
                         <!-- ══ Sidebar ═════════════════════════════════════ -->
                         <div class="dc-stt-aside">
+
+                            <!-- Preview -->
+                            <div class="dc-stt-preview-card">
+                                <div class="dc-stt-card-header">
+                                    <h2><span>👁️</span> <?php _e('Apercu', 'dc-scroll-top'); ?></h2>
+                                </div>
+                                <div class="dc-stt-preview-zone" id="dc-stt-preview-zone">
+                                    <div class="dc-stt-preview-btn" id="dc-stt-preview-btn"></div>
+                                </div>
+                            </div>
+
+                            <!-- A propos -->
                             <div class="dc-stt-sidebar">
-                                <h3><?php _e('À propos', 'dc-scroll-top'); ?></h3>
-                                <p><?php _e('Agence Web créée en 1999. Conception de sites Internet, Mobile, développement et bien d\'autres...', 'dc-scroll-top'); ?></p>
+                                <h3><?php _e('A propos', 'dc-scroll-top'); ?></h3>
+                                <p><?php _e('Agence Web creee en 1999. Conception de sites Internet, Mobile, developpement et bien d\'autres...', 'dc-scroll-top'); ?></p>
                                 <a href="https://www.dynamic-creative.com" target="_blank">
                                     <img src="<?php echo DST_DIR_URL; ?>assets/img/logo.png" alt="dynamic-creative.com" width="200" height="44" />
                                 </a>
@@ -361,21 +424,24 @@ class DC_Scroll_Top {
             wp_enqueue_script(
                 'dc-scroll-top-admin',
                 DST_DIR_URL . 'assets/js/admin.js',
-                ['wp-color-picker'],
+                ['jquery', 'wp-color-picker'],
                 DST_VERSION,
                 true
             );
+            wp_localize_script('dc-scroll-top-admin', 'DC_STT', [
+                'svg_styles' => $this->svg_styles,
+            ]);
         }
     }
 
     /**
-     * Ajoute le lien de paramètres
+     * Ajoute le lien de parametres
      */
     public function add_settings_link($links) {
-        $url = is_plugin_active('dc-support-technique/dc-support-technique.php') 
+        $url = is_plugin_active('dc-support-technique/dc-support-technique.php')
             ? 'admin.php?page=dcscrolltop-options'
             : 'options-general.php?page=dcscrolltop-options';
-        
+
         $settings_link = sprintf('<a href="%s">%s</a>', $url, __('Settings', 'dc-scroll-top'));
         array_unshift($links, $settings_link);
         return $links;
@@ -397,14 +463,14 @@ class DC_Scroll_Top {
     }
 
     /**
-     * Récupère une option
+     * Recupere une option
      */
     private function get_option($key) {
-        return get_option("dst_{$key}", $this->default_options[$key]);
+        return get_option("dst_{$key}", $this->default_options[$key] ?? '');
     }
 
     /**
-     * Récupère toutes les options
+     * Recupere toutes les options
      */
     private function get_options() {
         $options = [];
@@ -419,13 +485,16 @@ class DC_Scroll_Top {
      */
     private function save_options($post_data) {
         $allowed_keys = array_keys($this->default_options);
-        
+
         foreach ($allowed_keys as $key) {
             if (isset($post_data[$key])) {
                 $value = sanitize_text_field($post_data[$key]);
-                
-                // Validation spécifique
+
+                // Validation specifique
                 switch ($key) {
+                    case 'active':
+                        $value = $value ? '1' : '0';
+                        break;
                     case 'color':
                         $value = sanitize_hex_color($value) ?: $this->default_options[$key];
                         break;
@@ -433,6 +502,8 @@ class DC_Scroll_Top {
                     case 'pos_bottom':
                     case 'pos_right':
                     case 'size':
+                    case 'scroll_distance':
+                    case 'scroll_speed':
                         $value = absint($value) ?: $this->default_options[$key];
                         break;
                     case 'animation':
@@ -442,14 +513,14 @@ class DC_Scroll_Top {
                         $value = array_key_exists($value, $this->svg_styles) ? $value : $this->default_options[$key];
                         break;
                 }
-                
+
                 update_option("dst_{$key}", $value);
             }
         }
     }
 
     /**
-     * Récupère le chemin SVG pour un style donné
+     * Recupere le chemin SVG pour un style donne
      */
     private function get_svg_style($style_id) {
         return isset($this->svg_styles[$style_id]) ? $this->svg_styles[$style_id] : $this->svg_styles[1];

@@ -13,9 +13,15 @@
     outline: none;
 }
 
-/* États du bouton */
+/* Etats du bouton */
 #scrollUp:hover {
     opacity: 0.8 !important;
+}
+
+/* Focus visible pour accessibilite clavier */
+#scrollUp:focus-visible {
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
 }
 
 /* Animation slide */
@@ -23,7 +29,7 @@
     transition: bottom 350ms ease;
 }
 
-/* Classe pour l'état visible */
+/* Classe pour l'etat visible */
 .scrollup #scrollUp {
     opacity: 1;
     visibility: visible;
