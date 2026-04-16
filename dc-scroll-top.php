@@ -178,6 +178,7 @@ class DC_Scroll_Top {
         echo "    animation: '{$options['animation']}',\n";
         echo "    scrollDistance: {$options['scroll_distance']},\n";
         echo "    scrollSpeed: {$options['scroll_speed']},\n";
+        echo "    scrollText: '',\n";
         echo "    scrollTitle: '" . esc_js(__('Retour en haut', 'dc-scroll-top')) . "'\n";
         echo "  });\n";
         echo "})(jQuery);\n";
