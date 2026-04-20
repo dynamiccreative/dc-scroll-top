@@ -32,7 +32,12 @@
 
 /* Animation slide */
 .scrollup-slide #scrollUp {
-    transition: bottom 350ms ease;
+    opacity: 1;
+    transition: bottom 350ms ease, visibility 0s 350ms;
+}
+
+.scrollup-slide.scrollup #scrollUp {
+    transition: bottom 350ms ease, visibility 0s 0s;
 }
 
 /* Classe pour l'etat visible */
