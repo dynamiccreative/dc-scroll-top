@@ -105,6 +105,7 @@ class DC_Scroll_Top {
         $gitHubUpdater->setPluginIcon($this->config['icon_url']);
         $gitHubUpdater->setPluginBannerSmall($this->config['banner_url']);
         $gitHubUpdater->setPluginBannerLarge($this->config['banner_url']);
+        $gitHubUpdater->setChangelog('CHANGELOG.md');
         $gitHubUpdater->add();
     }
 
