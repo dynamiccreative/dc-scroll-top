@@ -5,8 +5,8 @@
   * Update URI: https://github.com/dynamiccreative/dc-scroll-top
  * Description: Ajoute un bouton scroll to top personnalisable.
  * Version: 2.0.2
- * Author: Team Dynamic Creative
- * Author URI: http://www.dynamic-creative.com
+ * Author: Team bleuebuzz
+ * Author URI: https://www.bleuebuzz.fr
  * GitHub Plugin URI: https://github.com/dynamiccreative/dc-scroll-top
  * Primary Branch: main
  * Text Domain: dc-scroll-top
@@ -388,8 +388,8 @@ class DC_Scroll_Top {
                             <div class="dc-stt-sidebar">
                                 <h3><?php _e('A propos', 'dc-scroll-top'); ?></h3>
                                 <p><?php _e('Agence Web creee en 1999. Conception de sites Internet, Mobile, developpement et bien d\'autres...', 'dc-scroll-top'); ?></p>
-                                <a href="https://www.dynamic-creative.com" target="_blank">
-                                    <img src="<?php echo DST_DIR_URL; ?>assets/img/logo.png" alt="dynamic-creative.com" width="200" height="44" />
+                                <a href="https://www.bleuebuzz.fr" target="_blank">
+                                    <img src="<?php echo DST_DIR_URL; ?>assets/img/logo.png" alt="bleuebuzz" width="200" height="44" />
                                 </a>
                             </div>
                         </div>

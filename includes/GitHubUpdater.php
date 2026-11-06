@@ -229,7 +229,8 @@ class DstGitHubUpdater
      */
     public function setPluginIcon(string $file): self
     {
-        $this->pluginIcon = ltrim($file, '/');
+        // DC PATCH: accept absolute URLs (http/https) without ltrim
+        $this->pluginIcon = preg_match('#^https?://#', $file) ? $file : ltrim($file, '/');
 
         return $this;
     }
@@ -242,7 +243,8 @@ class DstGitHubUpdater
      */
     public function setPluginBannerSmall(string $file): self
     {
-        $this->pluginBannerSmall = ltrim($file, '/');
+        // DC PATCH: accept absolute URLs (http/https) without ltrim
+        $this->pluginBannerSmall = preg_match('#^https?://#', $file) ? $file : ltrim($file, '/');
 
         return $this;
     }
@@ -255,7 +257,8 @@ class DstGitHubUpdater
      */
     public function setPluginBannerLarge(string $file): self
     {
-        $this->pluginBannerLarge = ltrim($file, '/');
+        // DC PATCH: accept absolute URLs (http/https) without ltrim
+        $this->pluginBannerLarge = preg_match('#^https?://#', $file) ? $file : ltrim($file, '/');
 
         return $this;
     }
@@ -1378,6 +1381,11 @@ class DstGitHubUpdater
     {
         if (!$this->pluginIcon) return '';
 
+        // DC PATCH: accept absolute URLs (http/https) — return as-is
+        if (preg_match('#^https?://#', $this->pluginIcon)) {
+            return $this->pluginIcon;
+        }
+
         $pluginIconPath = $this->pluginDir . '/' . $this->pluginIcon;
 
         return plugins_url($pluginIconPath);
@@ -1415,6 +1423,11 @@ class DstGitHubUpdater
      */
     private function getPluginFile(string $file): string
     {
+        // DC PATCH: accept absolute URLs (http/https) — return as-is
+        if (preg_match('#^https?://#', $file)) {
+            return $file;
+        }
+
         $file = sprintf('%s/%s', $this->pluginDir, $file);
 
         if (!file_exists(WP_PLUGIN_DIR . '/' . $file)) return '';

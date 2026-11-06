@@ -37,4 +37,4 @@ Le plugin se met a jour automatiquement via GitHub (integration GitHubUpdater).
 
 ## Author
 
-[Dynamic Creative](https://dynamic-creative.com) — Agence digitale / Infogerance
+[bleuebuzz](https://www.bleuebuzz.fr) — Agence digitale / Infogerance
